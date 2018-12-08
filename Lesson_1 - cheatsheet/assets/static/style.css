@@ -1,8 +1,14 @@
 body {
     font-family: 'Verdana', sans-serif;
-    margin: 50px 25px;
+    padding:0;
+    margin:0;
 }
-
+.bg{
+  margin:0;
+  position: fixed;
+  width:100;
+  z-index:-1;
+}
 a {
     color: #2a99b6;
 }
@@ -17,6 +23,7 @@ header, footer, div.page {
     background: #daeef3;
     padding: 20px 30px;
 }
+
 
 header h1 {
     color: #169bbd;

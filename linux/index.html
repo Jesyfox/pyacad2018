@@ -1,0 +1,345 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../static/style.css">
+<title>Linux — Lesson_1 - cheatsheet</title>
+<body>
+  <img src='/static/background.jpg' class="bg"/>
+  <header>
+    <h1>Lesson_1 - cheatsheet</h1>
+    <nav>
+      <ul class="nav navbar-nav">
+        <li><a href="../">Welcome</a></li>
+        
+          <li class="active"><a href="../linux/">Linux</a></li>
+        
+          <li><a href="../git/">Git</a></li>
+        
+          <li><a href="../IDE/">IDE</a></li>
+        
+      </ul>
+    </nav>
+  </header>
+  <div class="page">
+    
+  <h2>Linux</h2>
+  <p><div id="back"><div>
+<a href="#razdel1">1 – SYSTEM INFORMATION</a></p>
+<p><a href="#razdel2">2 – HARDWARE INFORMATION</a></p>
+<p><a href="#razdel3">3 – PERFORMANCE MONITORING AND STATISTICS</a></p>
+<p><a href="#razdel4">4 – USER INFORMATION AND MANAGEMENT</a></p>
+<p><a href="#razdel5">5 – FILE AND DIRECTORY COMMANDS</a></p>
+<p><a href="#razdel6">6 – PROCESS MANAGEMENT</a></p>
+<p><a href="#razdel7">7 – FILE PERMISSIONS</a></p>
+<p><a href="#razdel8">8 – NETWORKING</a></p>
+<p><a href="#razdel9">9 – ARCHIVES (TAR FILES)</a></p>
+<p><a href="#razdel10">10 – INSTALLING PACKAGES</a></p>
+<p><a href="#razdel11">11 – SEARCH</a></p>
+<p><a href="#razdel12">12 – SSH LOGINS</a></p>
+<p><a href="#razdel13">13 – FILE TRANSFERS</a></p>
+<p><a href="#razdel14">14 – DISK USAGE</a></p>
+<p><a href="#razdel15">15 – DIRECTORY NAVIGATION</a></p>
+<p><div id="razdel1"><div></p>
+<h1>1 – SYSTEM INFORMATION</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Display Linux system information</p>
+<p>uname -a</p>
+<p># Display kernel release information</p>
+<p>uname -r</p>
+<p># Show which version of redhat installed</p>
+<p>cat /etc/redhat-release</p>
+<p># Show how long the system has been running + load</p>
+<p>uptime</p>
+<p># Show system host name</p>
+<p>hostname</p>
+<p># Display the IP addresses of the host</p>
+<p>hostname -I</p>
+<p># Show system reboot history</p>
+<p>last reboot</p>
+<p># Show the current date and time</p>
+<p>date</p>
+<p># Show this month's calendar</p>
+<p>cal</p>
+<p># Display who is online</p>
+<p>w</p>
+<p># Who you are logged in as</p>
+<p>whoami</p>
+<p><div id="razdel2"><div></p>
+<h1>2 – HARDWARE INFORMATION</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Display messages in kernel ring buffer</p>
+<p>dmesg</p>
+<p># Display CPU information</p>
+<p>cat /proc/cpuinfo</p>
+<p># Display memory information</p>
+<p>cat /proc/meminfo</p>
+<p># Display free and used memory ( -h for human readable, -m for MB, -g for GB.)</p>
+<p>free -h</p>
+<p># Display PCI devices</p>
+<p>lspci -tv</p>
+<p># Display USB devices</p>
+<p>lsusb -tv</p>
+<p># Display DMI/SMBIOS (hardware info) from the BIOS</p>
+<p>dmidecode</p>
+<p># Show info about disk sda</p>
+<p>hdparm -i /dev/sda</p>
+<p># Perform a read speed test on disk sda</p>
+<p>hdparm -tT /dev/sda</p>
+<p># Test for unreadable blocks on disk sda</p>
+<p>badblocks -s /dev/sda</p>
+<p><div id="razdel3"><div></p>
+<h1>3 – PERFORMANCE MONITORING AND STATISTICS</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Display and manage the top processes</p>
+<p>top</p>
+<p># Interactive process viewer (top alternative)</p>
+<p>htop</p>
+<p># Display processor related statistics</p>
+<p>mpstat 1</p>
+<p># Display virtual memory statistics</p>
+<p>vmstat 1</p>
+<p># Display I/O statistics</p>
+<p>iostat 1</p>
+<p># Display the last 100 syslog messages  (Use /var/log/syslog for Debian based systems.)</p>
+<p>tail 100 /var/log/messages</p>
+<p># Capture and display all packets on interface eth0</p>
+<p>tcpdump -i eth0</p>
+<p># Monitor all traffic on port 80 ( HTTP )</p>
+<p>tcpdump -i eth0 'port 80'</p>
+<p># List all open files on the system</p>
+<p>lsof</p>
+<p># List files opened by user</p>
+<p>lsof -u user</p>
+<p># Display free and used memory ( -h for human readable, -m for MB, -g for GB.)</p>
+<p>free -h</p>
+<p># Execute "df -h", showing periodic updates</p>
+<p>watch df -h</p>
+<p><div id="razdel4"><div></p>
+<h1>4 – USER INFORMATION AND MANAGEMENT</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Display the user and group ids of your current user.</p>
+<p>id</p>
+<p># Display the last users who have logged onto the system.</p>
+<p>last</p>
+<p># Show who is logged into the system.</p>
+<p>who</p>
+<p># Show who is logged in and what they are doing.</p>
+<p>w</p>
+<p># Create a group named "test".</p>
+<p>groupadd test</p>
+<p># Create an account named john, with a comment of "John Smith" and create the user's home directory.</p>
+<p>useradd -c "John Smith" -m john</p>
+<p># Delete the john account.</p>
+<p>userdel john</p>
+<p># Add the john account to the sales group</p>
+<p>usermod -aG sales john</p>
+<p><div id="razdel5"><div></p>
+<h1>5 – FILE AND DIRECTORY COMMANDS</h1>
+<p><a href="#back">go UP!</a></p>
+<p># List all files in a long listing (detailed) format</p>
+<p>ls -al</p>
+<p># Display the present working directory</p>
+<p>pwd</p>
+<p># Create a directory</p>
+<p>mkdir directory</p>
+<p># Remove (delete) file</p>
+<p>rm file</p>
+<p># Remove the directory and its contents recursively</p>
+<p>rm -r directory</p>
+<p># Force removal of file without prompting for confirmation</p>
+<p>rm -f file</p>
+<p># Forcefully remove directory recursively</p>
+<p>rm -rf directory</p>
+<p># Copy file1 to file2</p>
+<p>cp file1 file2</p>
+<p># Copy source_directory recursively to destination. If destination exists, copy source_directory into destination, otherwise create destination with the contents of source_directory.</p>
+<p>cp -r source_directory destination</p>
+<p># Rename or move file1 to file2. If file2 is an existing directory, move file1 into directory file2</p>
+<p>mv file1 file2</p>
+<p># Create symbolic link to linkname</p>
+<p>ln -s /path/to/file linkname</p>
+<p># Create an empty file or update the access and modification times of file.</p>
+<p>touch file</p>
+<p># View the contents of file</p>
+<p>cat file</p>
+<p># Browse through a text file</p>
+<p>less file</p>
+<p># Display the first 10 lines of file</p>
+<p>head file</p>
+<p># Display the last 10 lines of file</p>
+<p>tail file</p>
+<p># Display the last 10 lines of file and "follow" the file as it grows.</p>
+<p>tail -f file</p>
+<p><div id="razdel6"><div></p>
+<h1>6 – PROCESS MANAGEMENT</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Display your currently running processes</p>
+<p>ps</p>
+<p># Display all the currently running processes on the system.</p>
+<p>ps -ef</p>
+<p># Display process information for processname</p>
+<p>ps -ef | grep processname</p>
+<p># Display and manage the top processes</p>
+<p>top</p>
+<p># Interactive process viewer (top alternative)</p>
+<p>htop</p>
+<p># Kill process with process ID of pid</p>
+<p>kill pid</p>
+<p># Kill all processes named processname</p>
+<p>killall processname</p>
+<p># Start program in the background</p>
+<p>program &amp;</p>
+<p># Display stopped or background jobs</p>
+<p>bg</p>
+<p># Brings the most recent background job to foreground</p>
+<p>fg</p>
+<p># Brings job n to the foreground</p>
+<p>fg n</p>
+<p><div id="razdel7"><div></p>
+<h1>7 – FILE PERMISSIONS</h1>
+<p><a href="#back">go UP!</a></p>
+<p><img src="linux-permissions-chart.png" width=600/></p>
+<p>Linux chmod example
+        PERMISSION      EXAMPLE</p>
+<pre><code>     U   G   W
+    rwx rwx rwx     chmod 777 filename
+    rwx rwx r-x     chmod 775 filename
+    rwx r-x r-x     chmod 755 filename
+    rw- rw- r--     chmod 664 filename
+    rw- r-- r--     chmod 644 filename
+</code></pre>
+<p># NOTE: Use 777 sparingly!</p>
+<pre><code>    LEGEND
+    U = User
+    G = Group
+    W = World
+
+    r = Read
+    w = write
+    x = execute
+    - = no access
+</code></pre>
+<p><div id="razdel8"><div></p>
+<h1>8 – NETWORKING</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Display all network interfaces and ip address</p>
+<p>ifconfig -a</p>
+<p># Display eth0 address and details</p>
+<p>ifconfig eth0</p>
+<p># Query or control network driver and hardware settings</p>
+<p>ethtool eth0</p>
+<p># Send ICMP echo request to host</p>
+<p>ping host</p>
+<p># Display whois information for domain</p>
+<p>whois domain</p>
+<p># Display DNS information for domain</p>
+<p>dig domain</p>
+<p># Reverse lookup of IP_ADDRESS</p>
+<p>dig -x IP_ADDRESS</p>
+<p># Display DNS ip address for domain</p>
+<p>host domain</p>
+<p># Display the network address of the host name.</p>
+<p>hostname -i</p>
+<p># Display all local ip addresses</p>
+<p>hostname -I</p>
+<p># Download <a href="http://domain.com/file">http://domain.com/file</a></p>
+<p>wget <a href="http://domain.com/file">http://domain.com/file</a></p>
+<p># Display listening tcp and udp ports and corresponding programs</p>
+<p>netstat -nutlp</p>
+<p><div id="razdel9"><div></p>
+<h1>9 – ARCHIVES (TAR FILES)</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Create tar named archive.tar containing directory.</p>
+<p>tar cf archive.tar directory</p>
+<p># Extract the contents from archive.tar.</p>
+<p>tar xf archive.tar</p>
+<p># Create a gzip compressed tar file name archive.tar.gz.</p>
+<p>tar czf archive.tar.gz directory</p>
+<p># Extract a gzip compressed tar file.</p>
+<p>tar xzf archive.tar.gz</p>
+<p># Create a tar file with bzip2 compression</p>
+<p>tar cjf archive.tar.bz2 directory</p>
+<p># Extract a bzip2 compressed tar file.</p>
+<p>tar xjf archive.tar.bz2</p>
+<p><div id="razdel10"><div></p>
+<h1>10 – INSTALLING PACKAGES</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Search for a package by keyword.</p>
+<p>yum search keyword</p>
+<p># Install package.</p>
+<p>yum install package</p>
+<p># Display description and summary information about package.</p>
+<p>yum info package</p>
+<p># Install package from local file named package.rpm</p>
+<p>rpm -i package.rpm</p>
+<p># Remove/uninstall package.</p>
+<p>yum remove package</p>
+<p># Install software from source code.</p>
+<p>tar zxvf sourcecode.tar.gz
+cd sourcecode
+./configure
+make
+make install</p>
+<p><div id="razdel11"><div></p>
+<h1>11 – SEARCH</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Search for pattern in file</p>
+<p>grep pattern file</p>
+<p># Search recursively for pattern in directory</p>
+<p>grep -r pattern directory</p>
+<p># Find files and directories by name</p>
+<p>locate name</p>
+<p># Find files in /home/john that start with "prefix".</p>
+<p>find /home/john -name 'prefix*'</p>
+<p># Find files larger than 100MB in /home</p>
+<p>find /home -size +100M</p>
+<p><div id="razdel12"><div></p>
+<h1>12 – SSH LOGINS</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Connect to host as your local username.</p>
+<p>ssh host</p>
+<p># Connect to host as user</p>
+<p>ssh user@host</p>
+<p># Connect to host using port</p>
+<p>ssh -p port user@host</p>
+<p><div id="razdel13"><div></p>
+<h1>13 – FILE TRANSFERS</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Secure copy file.txt to the /tmp folder on server</p>
+<p>scp file.txt server:/tmp</p>
+<p># Copy *.html files from server to the local /tmp folder.</p>
+<p>scp server:/var/www/*.html /tmp</p>
+<p># Copy all files and directories recursively from server to the current system's /tmp folder.</p>
+<p>scp -r server:/var/www /tmp</p>
+<p># Synchronize /home to /backups/home</p>
+<p>rsync -a /home /backups/</p>
+<p># Synchronize files/directories between the local and remote system with compression enabled</p>
+<p>rsync -avz /home server:/backups/</p>
+<p><div id="razdel14"><div></p>
+<h1>14 – DISK USAGE</h1>
+<p><a href="#back">go UP!</a></p>
+<p># Show free and used space on mounted filesystems</p>
+<p>df -h</p>
+<p># Show free and used inodes on mounted filesystems</p>
+<p>df -i</p>
+<p># Display disks partitions sizes and types</p>
+<p>fdisk -l</p>
+<p># Display disk usage for all files and directories in human readable format</p>
+<p>du -ah</p>
+<p># Display total disk usage off the current directory</p>
+<p>du -sh</p>
+<p><div id="razdel15"><div></p>
+<h1>15 – DIRECTORY NAVIGATION</h1>
+<p><a href="#back">go UP!</a></p>
+<p># To go up one level of the directory tree.  (Change into the parent directory.)</p>
+<p>cd ..</p>
+<p># Go to the $HOME directory</p>
+<p>cd</p>
+<p># Change to the /etc directory</p>
+<p>cd /etc</p>
+
+
+  </div>
+  <footer>
+    &copy; Copyright 2018 by Bogdan S.
+  </footer>
+</body>

@@ -4,9 +4,9 @@ cache:
   directories:
     - $HOME/.cache/pip
     - $HOME/.cache/lektor/builds
+before_install: cd Lesson_1\ -\ cheatsheet/
 install: "pip install Lektor"
 script: "lektor build"
-script: "cd Lesson_1\ -\ cheatsheet/"
 deploy:
   provider: script
   script: "lektor deploy ghpages"

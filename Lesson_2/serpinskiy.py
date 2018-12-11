@@ -1,4 +1,5 @@
 import turtle
+
 bob = turtle.Turtle()
 
 
@@ -21,7 +22,7 @@ def generate_triangle_cordinates(turtle, size=70):
         turtle.goto(home_pos)
         turtle.left(120)
 
-    return triangle_cordinates
+    return tuple(triangle_cordinates)
 
 
 def make_triangle(turtle, triangle_cordinates):
@@ -33,46 +34,48 @@ def make_triangle(turtle, triangle_cordinates):
         turtle.goto(x, y)
 
 
-def crop_triangle(cordinates):
+def crop_triangle(cuting_cordinates):
     triangles = []
-    for main_cordinate in cordinates:
+    for main_cordinate in cuting_cordinates:
         new_triangle = []
+
         # make a copy of cordinates
-        another_cordinates = cordinates[:]
-        # delete itering cordinate
+        another_cordinates = list(cuting_cordinates[:])
+
+        # delete itering cordinate and add first point of triangle
         new_triangle.append(another_cordinates.pop(another_cordinates.index(main_cordinate)))
-        # get centred point of side
+
+        # get centred point of side and other triangle points
         for dx, dy in another_cordinates:
             x, y = main_cordinate
-            new_x = (x + dx)/2
-            new_y = (y + dy)/2
+            new_x = round((x + dx)/2, 3)
+            new_y = round((y + dy)/2, 3)
             new_triangle.append((new_x, new_y))
+
         triangles.append(new_triangle)
     return triangles
 
 
-def serpinskiy_triangle(turtle, cordinates, depth):
-    def smaller_triangles(turtle, triangle, deep):
-        deep -= 1
-        if deep is 0:
-            return 0
-        # we start go deeper
-        for triangle in crop_triangle(triangle):
-            make_triangle(turtle, triangle)
-            smaller_triangles(turtle, triangle, deep)
-    # write main triangle
-    make_triangle(turtle, cordinates)
-    smaller_triangles(turtle, cordinates, deep=depth)
+def serpinskiy_triangle(turtle, triangles, depth_scale):
+    if depth_scale <= 0:
+        return 0
+    smaller_triangles = []
+    for triangle in triangles:
+        make_triangle(turtle, triangle)
+        smaller_triangles = [*smaller_triangles, *crop_triangle(triangle)]
+    depth_scale -= 1
+    serpinskiy_triangle(turtle, smaller_triangles, depth_scale)
+
 
 
 def main():
-    bob.speed('fastest')
-    cord = generate_triangle_cordinates(bob, size=200)
-    serpinskiy_triangle(bob, cord, depth=6)
+    main_triangle = [generate_triangle_cordinates(bob, size=250), ]  # pack to list for iteration
+    serpinskiy_triangle(bob, main_triangle, depth_scale=6)
 
     bob.penup()
     bob.home()
 
+    print('turtle is done!')
     turtle.done()
 
 

@@ -51,23 +51,27 @@ def crop_triangle(cordinates):
     return triangles
 
 
-
-
-
-def serpinskiy_triangle(turtle, cordinates, depth=3):
+def serpinskiy_triangle(turtle, cordinates, depth):
+    def smaller_triangles(turtle, triangle, deep):
+        deep -= 1
+        if deep is 0:
+            return 0
+        # we start go deeper
+        for triangle in crop_triangle(triangle):
+            make_triangle(turtle, triangle)
+            smaller_triangles(turtle, triangle, deep)
     # write main triangle
-    def smaller_triangles(turtle, triangle):
-        for tri in crop_triangle(triangle):
-            make_triangle(turtle, tri) # tri - triangle
-        smaller_triangles(turtle, tri)
-
     make_triangle(turtle, cordinates)
-    smaller_triangles(turtle, cordinates)
+    smaller_triangles(turtle, cordinates, deep=depth)
 
 
 def main():
-    cord = generate_triangle_cordinates(bob, size=100)
-    serpinskiy_triangle(bob, cord)
+    bob.speed('fastest')
+    cord = generate_triangle_cordinates(bob, size=200)
+    serpinskiy_triangle(bob, cord, depth=6)
+
+    bob.penup()
+    bob.home()
 
     turtle.done()
 

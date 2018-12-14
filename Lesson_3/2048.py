@@ -10,6 +10,10 @@ class Board(object):
         return str(self.matrix).replace('], [', '\n'*2).replace(',', '  ')[2:-2]
 
     def move(self, command):
+        """
+        moves all elements > 0
+        and merges equaled.
+        """
         line_move, col_move = self.directions[command]
         for lines in range(len(self.matrix)):
             for element in range(len(self.matrix[0])):
@@ -35,8 +39,11 @@ class Board(object):
                     continue
 
     def random_num(self):
+        """
+        Generetes random number from 'avalible_nums' var and place it on the matrix
+        """
         from random import choice
-        avalible_nums = [3, 6]
+        avalible_nums = [3, 9]
         avalible_elements = []
         for lines in range(len(self.matrix)):
             for element in range(len(self.matrix[0])):
@@ -52,6 +59,10 @@ class Board(object):
             self.isRuning = False
 
     def check(self):
+        """
+        Check all posible moves on  matrix,
+        if its 0 game is ending
+        """
         posible_moves = 0
         neibours_index = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         for line in range(len(self.matrix)):
@@ -68,6 +79,16 @@ class Board(object):
             pass
         else:
             self.isRuning = False
+            
+    def count(self):
+        """
+        count all elements from matrix
+        """
+        points = 0
+        for line in range(len(self.matrix)):
+            for col in range(len(self.matrix[0])):
+                points += self.matrix[line][col]
+        return points
 
 
 if __name__ == '__main__':
@@ -91,3 +112,4 @@ if __name__ == '__main__':
         game.random_num()
 
     print('THE END')
+    print('your score:', game.count())

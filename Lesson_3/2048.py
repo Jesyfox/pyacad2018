@@ -4,10 +4,8 @@ class Board(object):
         self.matrix = [[0 for x in range(size)] for y in range(size)]
         self.directions = {'UP': (-1, 0), 'DOWN': (1, 0),
                            'LEFT': (0, -1), 'RIGHT': (0, 1)}
-        self.matrix[1][2] = 2
-        self.matrix[0][2] = 2
-        self.matrix[2][2] = 2
-        self.matrix[3][2] = 2
+        self.isRuning = True
+
     def __repr__(self):
         return str(self.matrix).replace('], [', '\n'*2).replace(',', '  ')[2:-2]
 
@@ -37,14 +35,59 @@ class Board(object):
                     continue
 
     def random_num(self):
-        pass
+        from random import choice
+        avalible_nums = [3, 6]
+        avalible_elements = []
+        for lines in range(len(self.matrix)):
+            for element in range(len(self.matrix[0])):
+                if not self.matrix[lines][element]:
+                    avalible_elements.append((lines, element))
+                else:
+                    continue
+
+        if avalible_elements:
+            chosen_line, chosen_col = choice(avalible_elements)
+            self.matrix[chosen_line][chosen_col] = choice(avalible_nums)
+        else:
+            self.isRuning = False
+
+    def check(self):
+        posible_moves = 0
+        neibours_index = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        for line in range(len(self.matrix)):
+            for col in range(len(self.matrix[0])):
+                main_element = self.matrix[line][col]
+                for index in neibours_index:
+                    neibor_line, neibor_col = index
+                    try:
+                        if main_element == self.matrix[line + neibor_line][col + neibor_col] or main_element is 0:
+                            posible_moves += 1
+                    except IndexError:
+                        continue
+        if posible_moves:
+            pass
+        else:
+            self.isRuning = False
+
 
 if __name__ == '__main__':
-    test = Board(4)
-    print(test)
+    size = int(input('Enter a size of a board: '))
 
-    test.move('UP')
-    print('\n')
+    game = Board(size)
+    game.random_num()
+    commands = {'s': 'DOWN', 'w': 'UP', 'a': 'LEFT', 'd': 'RIGHT'}
 
-    print(test)
+    print('type:\n W for UP\n S for DOWN\n  A for LEFT\n D for RIGHT: \n')
 
+    while game.isRuning:
+        game.check()
+        print(game)
+        player_comand = input('comand: ').lower()
+        try:
+            game.move(commands[player_comand])
+        except KeyError:
+            print('WRONG COMAND!')
+            continue
+        game.random_num()
+
+    print('THE END')

@@ -5,9 +5,14 @@ class Board(object):
         self.directions = {'UP': (-1, 0), 'DOWN': (1, 0),
                            'LEFT': (0, -1), 'RIGHT': (0, 1)}
         self.isRuning = True
+        self.size = size
 
     def __repr__(self):
-        return str(self.matrix).replace('], [', '\n'*2).replace(',', '  ')[2:-2]
+        lines = []
+        for line in self.matrix:
+            lines.append('  '.join(str(elem) for elem in line))
+        res = '\n'.join(lines)
+        return res
 
     def move(self, command):
         """
@@ -15,8 +20,8 @@ class Board(object):
         and merges equaled.
         """
         line_move, col_move = self.directions[command]
-        for lines in range(len(self.matrix)):
-            for element in range(len(self.matrix[0])):
+        for lines in range(self.size):
+            for element in range(self.size):
                 line = lines + line_move
                 col = element + col_move
                 try:
@@ -45,8 +50,8 @@ class Board(object):
         from random import choice
         avalible_nums = [3, 9]
         avalible_elements = []
-        for lines in range(len(self.matrix)):
-            for element in range(len(self.matrix[0])):
+        for lines in range(self.size):
+            for element in range(self.size):
                 if not self.matrix[lines][element]:
                     avalible_elements.append((lines, element))
                 else:
@@ -65,8 +70,8 @@ class Board(object):
         """
         posible_moves = 0
         neibours_index = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        for line in range(len(self.matrix)):
-            for col in range(len(self.matrix[0])):
+        for line in range(self.size):
+            for col in range(self.size):
                 main_element = self.matrix[line][col]
                 for index in neibours_index:
                     neibor_line, neibor_col = index
@@ -85,8 +90,8 @@ class Board(object):
         count all elements from matrix
         """
         points = 0
-        for line in range(len(self.matrix)):
-            for col in range(len(self.matrix[0])):
+        for line in range(self.size):
+            for col in range(self.size):
                 points += self.matrix[line][col]
         return points
 

@@ -43,7 +43,7 @@ def main():
     text_to_hide = input('Type a text: ').lower()
     hiden_text = crypto_ceasar(text_to_hide, key_word)
     print('crypted: ', hiden_text,
-          '\nuncrypted: ', crypto_ceasar(hiden_text, key_word, reversed=True))
+          '\nuncrypted: ', crypto_ceasar(hiden_text, key_word, reverse=True))
 
 
 if __name__ == '__main__':

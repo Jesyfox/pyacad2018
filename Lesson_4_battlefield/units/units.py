@@ -43,19 +43,36 @@ class Soldier(Unit):
 
 
 class Squad:
-    pass
+    def __init__(self, solders):
+        self.solders = solders
 
 
 class Vehicle(Unit):
+    """
+    a battle vehicle has additional properties:
+        operators [1-3] - the number of soldiers required to operate the vehicle
+    """
+
+    def __init__(self, drivers: list):
+        super().__init__(min_recharge=1000)
+        self.operators = Operators(drivers)
+
+
+class Operators:
+    def __init__(self, drivers: list):
+        self.drivers = drivers
+
+    def attack_success(self):
+        return [drvr.experience for drvr in self.drivers]
+
+    def health(self):
+        return [drvr.health for drvr in self.drivers]
+
+
+def geometric_average(arr:list):
     pass
 
 
 if __name__ == '__main__':
-    johny = Soldier()
-    print(johny.health)
-    print(johny.experience)
-    print(johny.damage)
-    johny.exp_increase(10)
-    print(johny.experience)
-    print(johny.damage)
-    print(johny.attack_success)
+    johny = Vehicle()
+    print(johny.recharge)

@@ -1,5 +1,5 @@
 __author__ = 'Bogdan.S'
-from random import randint
+from random import randint, choice
 
 
 class Unit(object):
@@ -15,6 +15,8 @@ class Unit(object):
         self.is_Alive = True
         self.health = 100
         self.recharge = randint(min_recharge, 2000)
+        self.damage = 0
+        self.attack_success = 0
 
     def damaged(self, damage):
         self.health -= damage
@@ -32,9 +34,7 @@ class Soldier(Unit):
     def __init__(self):
         super().__init__()
         self.experience = 0
-        self.damage = 0
-        self.attack_success = 0
-        self.exp_increase(exp=0)
+        self.exp_increase(exp=0) # initial call
 
     def exp_increase(self, exp=1):
         self.experience += exp
@@ -51,28 +51,56 @@ class Vehicle(Unit):
     """
     a battle vehicle has additional properties:
         operators [1-3] - the number of soldiers required to operate the vehicle
+
+    A vehicle is considered active as long as it self has any health and there is and vehicle operator
+    with and health. if the vehicle is destroyed, any remaining vehicle operator is considered as inactive(killed)
     """
 
     def __init__(self, drivers: list):
         super().__init__(min_recharge=1000)
         self.operators = Operators(drivers)
+        self.total_health = 0
+        self.damaged(0)  # initial call
+
+    def damaged(self, damage):
+        to_vehicle = 0.6
+        to_random_drvr = 0.2
+        to_other_operators = 0.1
+
+        self.health -= damage*to_vehicle
+
+        random_driver = choice(self.operators.drivers)
+        random_driver.health -= damage*to_random_drvr
+
+        self.damage = 0.1 + sum([exp/100 for exp in self.operators.experience()])
+        self.attack_success = 0.5 * (1 + self.health/100) * geometric_average(self.operators.attack_success())
+        self.total_health = sum(self.operators.health()) + self.health
+
+    def exp_increase(self):
+        pass
 
 
 class Operators:
     def __init__(self, drivers: list):
         self.drivers = drivers
 
-    def attack_success(self):
+    def experience(self):
         return [drvr.experience for drvr in self.drivers]
 
     def health(self):
         return [drvr.health for drvr in self.drivers]
 
+    def attack_success(self):
+        return [drvr.attack_success for drvr in self.drivers]
 
-def geometric_average(arr:list):
+
+def geometric_average(arr: list):
     pass
+    return 0
 
 
 if __name__ == '__main__':
-    johny = Vehicle()
-    print(johny.recharge)
+    drivers = [Soldier(), Soldier(), Soldier()]
+    johny = Vehicle(drivers)
+    johny.damaged(1)
+    print(johny.operators.health())

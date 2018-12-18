@@ -1,5 +1,5 @@
 __author__ = 'Bogdan.S'
-from random import randint, choice
+from random import randint, sample
 
 
 class Unit(object):
@@ -20,6 +20,10 @@ class Unit(object):
 
     def damaged(self, damage):
         self.health -= damage
+        self.update()
+
+    def update(self):
+        pass
 
 
 class Soldier(Unit):
@@ -34,10 +38,14 @@ class Soldier(Unit):
     def __init__(self):
         super().__init__()
         self.experience = 0
-        self.exp_increase(exp=0) # initial call
+        self.update()
 
     def exp_increase(self, exp=1):
         self.experience += exp
+        self.update()
+
+    def update(self):
+        super().update()
         self.damage = 0.05 + self.experience / 100
         self.attack_success = 0.5 * (1 + self.health/100) * randint(50 + self.experience, 100) / 100
 
@@ -60,18 +68,26 @@ class Vehicle(Unit):
         super().__init__(min_recharge=1000)
         self.operators = Operators(drivers)
         self.total_health = 0
-        self.damaged(0)  # initial call
+        self.update()  # initial call
 
     def damaged(self, damage):
         to_vehicle = 0.6
         to_random_drvr = 0.2
         to_other_operators = 0.1
+        random = False
 
         self.health -= damage*to_vehicle
 
-        random_driver = choice(self.operators.drivers)
-        random_driver.health -= damage*to_random_drvr
+        for driver in sample(self.operators.drivers, len(self.operators.drivers)):
+            if not random:
+                driver.health -= damage*to_random_drvr
+                random = True
+            else:
+                driver.health -= damage*to_other_operators
+        self.update()
 
+    def update(self):
+        super().update()
         self.damage = 0.1 + sum([exp/100 for exp in self.operators.experience()])
         self.attack_success = 0.5 * (1 + self.health/100) * geometric_average(self.operators.attack_success())
         self.total_health = sum(self.operators.health()) + self.health
@@ -95,12 +111,16 @@ class Operators:
 
 
 def geometric_average(arr: list):
-    pass
-    return 0
+    power = 1 / len(arr)
+    res = 1
+    for i in arr:
+        res *= i
+    return res**power
 
 
 if __name__ == '__main__':
     drivers = [Soldier(), Soldier(), Soldier()]
     johny = Vehicle(drivers)
-    johny.damaged(1)
+    johny.damaged(20)
     print(johny.operators.health())
+

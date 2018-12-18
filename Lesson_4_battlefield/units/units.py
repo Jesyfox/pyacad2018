@@ -1,5 +1,6 @@
 __author__ = 'Bogdan.S'
-from random import randint, sample
+from random import randint, sample, random
+from time import time
 
 
 class Unit(object):
@@ -17,12 +18,23 @@ class Unit(object):
         self.recharge = randint(min_recharge, 2000)
         self.damage = 0
         self.attack_success = 0
+        self.reload = waiter(self.recharge)
 
-    def damaged(self, damage):
+    def take_damage(self, damage):
         self.health -= damage
         self.update()
 
     def update(self):
+        pass
+
+    def attack(self):
+        if random() < self.attack_success and not next(self.reload):
+            self.exp_increase()
+            return self.damage
+        else:
+            return None
+
+    def exp_increase(self):
         pass
 
 
@@ -41,11 +53,11 @@ class Soldier(Unit):
         self.update()
 
     def exp_increase(self, exp=1):
-        self.experience += exp
+        if self.experience < 50:
+            self.experience += exp
         self.update()
 
     def update(self):
-        super().update()
         self.damage = 0.05 + self.experience / 100
         self.attack_success = 0.5 * (1 + self.health/100) * randint(50 + self.experience, 100) / 100
 
@@ -70,24 +82,23 @@ class Vehicle(Unit):
         self.total_health = 0
         self.update()  # initial call
 
-    def damaged(self, damage):
+    def take_damage(self, damage):
         to_vehicle = 0.6
         to_random_drvr = 0.2
         to_other_operators = 0.1
-        random = False
+        rand_driver = False
 
         self.health -= damage*to_vehicle
 
         for driver in sample(self.operators.drivers, len(self.operators.drivers)):
-            if not random:
+            if not rand_driver:
                 driver.health -= damage*to_random_drvr
-                random = True
+                rand_driver = True
             else:
                 driver.health -= damage*to_other_operators
         self.update()
 
     def update(self):
-        super().update()
         self.damage = 0.1 + sum([exp/100 for exp in self.operators.experience()])
         self.attack_success = 0.5 * (1 + self.health/100) * geometric_average(self.operators.attack_success())
         self.total_health = sum(self.operators.health()) + self.health
@@ -118,9 +129,23 @@ def geometric_average(arr: list):
     return res**power
 
 
+def waiter(recharge):
+    while True:
+        timer = time()
+        while True:
+            if (time() - timer) < (recharge/1000):
+                yield True
+            else:
+                yield False
+                break
+
+
 if __name__ == '__main__':
     drivers = [Soldier(), Soldier(), Soldier()]
-    johny = Vehicle(drivers)
-    johny.damaged(20)
-    print(johny.operators.health())
+    johny = Soldier()
+    pew = 0
+    while True:
+        if johny.attack():
+            pew += 1
+            print('pew', pew)
 

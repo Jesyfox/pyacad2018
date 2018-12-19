@@ -1,5 +1,5 @@
 __author__ = 'Bogdan.S'
-from random import randint, sample, random
+from random import randint, sample, random, choice
 from time import time
 
 
@@ -28,14 +28,13 @@ class Unit(object):
     def update(self):
         if self.health <= 0:
             self.is_Alive = False
-        print(self.health)
 
     def attack(self):
         if random() < self.attack_success and not next(self.reload):
             self.exp_increase()
             return self.damage
         else:
-            return None
+            return 0
 
     def exp_increase(self):
         pass
@@ -109,10 +108,14 @@ class Vehicle(Unit):
         self.update()
 
 
-class Squad:
+class Operators:
 
     def __init__(self, units: list):
         self.units = units
+
+    def exp_increase(self):
+        for unit in self.units:
+            unit.exp_increase()
 
     def experience(self):
         return [unit.experience for unit in self.units]
@@ -124,11 +127,48 @@ class Squad:
         return [unit.attack_success for unit in self.units]
 
 
-class Operators(Squad):
+class Squad:
+    def __init__(self, units):
+        self.units = units
+        self.strategy = choice(['random', 'weakest', 'strongest'])
 
-    def exp_increase(self):
-        for unit in self.units:
-            unit.exp_increase()
+    def attack(self, squads):
+        target = self.choose_target(squads)
+        if target.attack_success() < self.attack_success():
+            target.take_damage(self.total_attack())
+
+    def take_damage(self, damage):
+        choice(self.units).take_damage(damage)
+
+    def choose_target(self, squads: list):
+        if self.strategy is 'weakest':
+            weakest = squads[0]
+            for squad in squads:
+                if sum(weakest.total_health()) > sum(squad.total_health()):
+                    weakest = squad
+                else:
+                    pass
+            res = weakest
+        elif self.strategy is 'strongest':
+            strongest = squads[0]
+            for squad in squads:
+                if strongest.total_attack() < squad.total_attack():
+                    strongest = squad
+                else:
+                    pass
+            res = strongest
+        else:
+            res = choice(squads)
+        return res
+
+    def total_health(self):
+        return [unit.health for unit in self.units]
+
+    def total_attack(self):
+        return sum([unit.damage for unit in self.units])
+
+    def attack_success(self):
+        return geometric_average([unit.attack_success for unit in self.units])
 
 
 def geometric_average(arr: list):
@@ -143,7 +183,7 @@ def waiter(recharge):
     while True:
         timer = time()
         while True:
-            if (time() - timer) < (recharge/6000):
+            if (time() - timer) < (recharge/1000):
                 yield True
             else:
                 yield False
@@ -151,15 +191,13 @@ def waiter(recharge):
 
 
 if __name__ == '__main__':
-    drivers = [Soldier()]
-    johny = Vehicle(drivers)
-    arnold = Vehicle([Soldier()])
+    alpha = Squad([Soldier() for x in range(randint(5, 10))])
+    beta = Squad([Soldier() for x in range(randint(5, 10))])
 
-    while johny.is_Alive and arnold.is_Alive:
-        johny.take_damage(arnold.attack())
-        arnold.take_damage(johny.attack())
-    print('johny: ', johny.is_Alive)
-    print('arnold: ', arnold.is_Alive)
+    for i in range(10):
+        alpha.attack([beta])
+    print(beta.total_health())
+
 
 
 

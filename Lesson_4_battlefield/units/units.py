@@ -130,36 +130,35 @@ class Operators:
 class Squad:
     def __init__(self, units):
         self.units = units
-        self.strategy = choice(['random', 'weakest', 'strongest'])
 
     def attack(self, squads):
-        target = self.choose_target(squads)
+        strategy = choice(['random', 'weakest', 'strongest'])
+        target = self.choose_target(strategy, squads)
         if target.attack_success() < self.attack_success():
             target.take_damage(self.total_attack())
 
     def take_damage(self, damage):
         choice(self.units).take_damage(damage)
 
-    def choose_target(self, squads: list):
-        if self.strategy is 'weakest':
+    def choose_target(self, strategy: str, squads: list):
+        if strategy is 'weakest':
             weakest = squads[0]
             for squad in squads:
                 if sum(weakest.total_health()) > sum(squad.total_health()):
                     weakest = squad
-                else:
-                    pass
             res = weakest
-        elif self.strategy is 'strongest':
+        elif strategy is 'strongest':
             strongest = squads[0]
             for squad in squads:
                 if strongest.total_attack() < squad.total_attack():
                     strongest = squad
-                else:
-                    pass
             res = strongest
         else:
             res = choice(squads)
         return res
+
+    def is_alive(self):
+        pass
 
     def total_health(self):
         return [unit.health for unit in self.units]
@@ -194,10 +193,11 @@ if __name__ == '__main__':
     alpha = Squad([Soldier() for x in range(randint(5, 10))])
     beta = Squad([Soldier() for x in range(randint(5, 10))])
 
-    for i in range(10):
+    for i in range(1000):
         alpha.attack([beta])
+        beta.attack([alpha])
     print(beta.total_health())
-
+    print(alpha.total_health())
 
 
 

@@ -1,8 +1,7 @@
 __author__ = 'Bogdan.S'
 from random import randint, sample, random
 from time import time
-import unit_packs
-import strategy
+from unit_packs import *
 
 
 class Unit(object):
@@ -79,8 +78,7 @@ class Vehicle(Unit):
 
     def __init__(self, drivers: list):
         super().__init__(min_recharge=1000)
-        self.operators = unit_packs.Operators(drivers)
-        self.total_health = 0
+        self.operators = Operators(drivers)
         self.update()  # initial call
 
     def take_damage(self, damage):
@@ -102,21 +100,14 @@ class Vehicle(Unit):
 
     def update(self):
         super().update()
+        if sum(self.operators.health()) < 0:
+            self.health = 0
         self.damage = 0.1 + sum([exp/100 for exp in self.operators.experience()])
         self.attack_success = 0.5 * (1 + self.health/100) * geometric_average(self.operators.attack_success())
-        self.total_health = sum(self.operators.health()) + self.health
 
     def exp_increase(self):
         self.operators.exp_increase()
         self.update()
-
-
-def geometric_average(arr: list):
-    power = 1 / len(arr)
-    res = 1
-    for i in arr:
-        res *= i
-    return res**power
 
 
 def waiter(recharge):
@@ -131,15 +122,10 @@ def waiter(recharge):
 
 
 if __name__ == '__main__':
-    alpha = unit_packs.Squad([Soldier() for x in range(randint(5, 10))])
-    beta = unit_packs.Squad([Soldier() for x in range(randint(5, 10))])
-
-    for i in range(1000):
+    from unit_packs import Squad
+    alpha = Squad([Vehicle([Soldier(), Soldier(), Soldier()])])
+    beta = Squad([Soldier()])
+    while alpha.is_Alive and beta.is_Alive:
         alpha.attack([beta])
         beta.attack([alpha])
-    print(beta.total_health())
-    print(alpha.total_health())
-    print(strategy.Random())
-
-
-
+        print(alpha.total_health(), beta.total_health())

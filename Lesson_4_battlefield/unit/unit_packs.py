@@ -7,6 +7,9 @@ class Operators:
     def __init__(self, units: list):
         self.units = units
 
+    def __repr__(self):
+        return str(self.units)
+
     def exp_increase(self):
         for unit in self.units:
             unit.exp_increase()
@@ -73,6 +76,9 @@ class Squad:
 
     def fire(self):
         return sum([unit.attack() for unit in self.units])
+
+    def __repr__(self):
+        return str(self.units)
 
 
 def geometric_average(arr: list):

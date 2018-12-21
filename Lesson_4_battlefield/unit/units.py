@@ -15,11 +15,17 @@ class Unit(object):
     """
     def __init__(self, min_recharge=200):
         self.is_Alive = True
+        self.visual = 'X'
         self.health = 100
         self.recharge = randint(min_recharge, 2000)
         self.damage = 0
         self.attack_success = 0
         self.reload = waiter(self.recharge)
+
+    def __repr__(self):
+        scale_bar = ['. ', ': ', ':.', '::', '']
+        scale_index = int(self.health * (len(scale_bar)-1) // 100)
+        return f'{self.visual}{scale_bar[scale_index]}'
 
     def take_damage(self, damage):
         if damage:
@@ -53,7 +59,9 @@ class Soldier(Unit):
 
     def __init__(self):
         super().__init__()
+        self.unit_type = 'soldier'
         self.experience = 0
+        self.visual = '-0'
         self.update()
 
     def exp_increase(self, exp=1):
@@ -78,8 +86,10 @@ class Vehicle(Unit):
 
     def __init__(self, drivers: list):
         super().__init__(min_recharge=1000)
+        self.unit_type = 'vehicle'
         self.operators = Operators(drivers)
         self.update()  # initial call
+        self.visual = f'-=/{self.operators}\\'
 
     def take_damage(self, damage):
         if damage:
@@ -122,10 +132,11 @@ def waiter(recharge):
 
 
 if __name__ == '__main__':
+    # fight with soldier and vehicle test
     from unit_packs import Squad
     alpha = Squad([Vehicle([Soldier(), Soldier(), Soldier()])])
     beta = Squad([Soldier()])
     while alpha.is_Alive and beta.is_Alive:
         alpha.attack([beta])
         beta.attack([alpha])
-        print(alpha.total_health(), beta.total_health())
+        print(alpha, alpha.total_health(), beta, beta.total_health())

@@ -29,16 +29,23 @@ class Squad:
         self.units = units
         self.is_Alive = True
 
+    def __repr__(self):
+        return str(self.units)
+
     def attack(self, squads):
         strategy = choice(['random', 'weakest', 'strongest'])
         target = self.choose_target(strategy, squads)
         target.take_damage(self.fire())
 
     def take_damage(self, damage):
+        if not self.units:
+            del self
+            return None
         choice(self.units).take_damage(damage)
         self.update()
 
     def choose_target(self, strategy: str, squads: list):
+
         if strategy is 'weakest':
             weakest = squads[0]
             for squad in squads:
@@ -76,9 +83,6 @@ class Squad:
 
     def fire(self):
         return sum([unit.attack() for unit in self.units])
-
-    def __repr__(self):
-        return str(self.units)
 
 
 def geometric_average(arr: list):

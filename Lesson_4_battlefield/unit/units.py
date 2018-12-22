@@ -23,9 +23,13 @@ class Unit(object):
         self.reload = waiter(self.recharge)
 
     def __repr__(self):
-        scale_bar = ['. ', ': ', ':.', '::', '']
-        scale_index = int(self.health * (len(scale_bar)-1) // 100)
-        return f'{self.visual}{scale_bar[scale_index]}'
+        """
+        represents unit visualisation and health bar
+        like: 24 = '. ' or 79 = ':.'
+        """
+        health_bar = ['. ', ': ', ':.', '::', '']
+        scale_index = int(self.health * (len(health_bar)-1) // 100)
+        return f'{self.visual}{health_bar[scale_index]}'
 
     def take_damage(self, damage):
         if damage:
@@ -124,7 +128,7 @@ def waiter(recharge):
     while True:
         timer = time()
         while True:
-            if (time() - timer) < (recharge/1000):
+            if (time() - timer) < (recharge/1000000000):
                 yield True
             else:
                 yield False

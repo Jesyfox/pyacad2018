@@ -5,6 +5,17 @@ from time import time
 from unit_packs import *
 
 
+def waiter(recharge):
+    while True:
+        timer = time()
+        while True:
+            if (time() - timer) < (recharge/1000000000):
+                yield True
+            else:
+                yield False
+                break
+
+
 class Unit(ABC):
     UNIT = {}
 
@@ -32,7 +43,7 @@ class Unit(ABC):
         return cls.UNIT[name]()
 
 
-class UnitBaseMixin(Unit):
+class UnitBaseMixin:
     """
     represents either a soldier
     or a vehicle maned py predeterminated number of soldiers.
@@ -78,7 +89,7 @@ class UnitBaseMixin(Unit):
 
 
 @Unit.register('soldier')
-class Soldier(UnitBaseMixin):
+class Soldier(UnitBaseMixin, Unit):
     """
     Soldiers are units that have an additional property:
         experience [0-50] - Represents the soldier experience
@@ -106,7 +117,7 @@ class Soldier(UnitBaseMixin):
 
 
 @Unit.register('vehicle')
-class Vehicle(UnitBaseMixin):
+class Vehicle(UnitBaseMixin, Unit):
     """
     a battle vehicle has additional properties:
         operators [1-3] - the number of soldiers required to operate the vehicle
@@ -115,8 +126,8 @@ class Vehicle(UnitBaseMixin):
     with and health. if the vehicle is destroyed, any remaining vehicle operator is considered as inactive(killed)
     """
 
-    def __init__(self, drivers: list):
-        super().__init__(min_recharge=1000)
+    def __init__(self, drivers=[Soldier()]):
+        super().__init__(min_recharge=1000,)
         self.unit_type = 'vehicle'
         self.operators = Operators(drivers)
         self.update()  # initial call
@@ -151,17 +162,6 @@ class Vehicle(UnitBaseMixin):
         self.update()
 
 
-def waiter(recharge):
-    while True:
-        timer = time()
-        while True:
-            if (time() - timer) < (recharge/1000000000):
-                yield True
-            else:
-                yield False
-                break
-
-
 if __name__ == '__main__':
     # fight with soldier and vehicle test
     # from unit_packs import Squad
@@ -171,5 +171,5 @@ if __name__ == '__main__':
     #     alpha.attack([beta])
     #     beta.attack([alpha])
     #     print(alpha, alpha.total_health(), beta, beta.total_health())
-    a = Unit.new('soldier')
+    a = Unit.new('vehicle')
     print(a)

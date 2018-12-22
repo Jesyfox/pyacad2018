@@ -1,10 +1,38 @@
 __author__ = 'Bogdan.S'
+from abc import *
 from random import randint, sample, random
 from time import time
 from unit_packs import *
 
 
-class Unit(object):
+class Unit(ABC):
+    UNIT = {}
+
+    def take_damage(self, damage):
+        pass
+
+    def update(self):
+        pass
+
+    def attack(self):
+        pass
+
+    def exp_increase(self):
+        pass
+
+    @classmethod
+    def register(cls, name):
+        def dec(unit_cls):
+            cls.UNIT[name] = unit_cls
+            return unit_cls
+        return dec
+
+    @classmethod
+    def new(cls, name):
+        return cls.UNIT[name]()
+
+
+class UnitBaseMixin(Unit):
     """
     represents either a soldier
     or a vehicle maned py predeterminated number of soldiers.
@@ -48,11 +76,9 @@ class Unit(object):
         else:
             return 0
 
-    def exp_increase(self):
-        pass
 
-
-class Soldier(Unit):
+@Unit.register('soldier')
+class Soldier(UnitBaseMixin):
     """
     Soldiers are units that have an additional property:
         experience [0-50] - Represents the soldier experience
@@ -79,7 +105,8 @@ class Soldier(Unit):
         self.attack_success = 0.5 * (1 + self.health/100) * randint(50 + self.experience, 100) / 100
 
 
-class Vehicle(Unit):
+@Unit.register('vehicle')
+class Vehicle(UnitBaseMixin):
     """
     a battle vehicle has additional properties:
         operators [1-3] - the number of soldiers required to operate the vehicle
@@ -137,10 +164,12 @@ def waiter(recharge):
 
 if __name__ == '__main__':
     # fight with soldier and vehicle test
-    from unit_packs import Squad
-    alpha = Squad([Vehicle([Soldier(), Soldier(), Soldier()])])
-    beta = Squad([Soldier()])
-    while alpha.is_Alive and beta.is_Alive:
-        alpha.attack([beta])
-        beta.attack([alpha])
-        print(alpha, alpha.total_health(), beta, beta.total_health())
+    # from unit_packs import Squad
+    # alpha = Squad([Vehicle([Soldier(), Soldier(), Soldier()])])
+    # beta = Squad([Soldier()])
+    # while alpha.is_Alive and beta.is_Alive:
+    #     alpha.attack([beta])
+    #     beta.attack([alpha])
+    #     print(alpha, alpha.total_health(), beta, beta.total_health())
+    a = Unit.new('soldier')
+    print(a)

@@ -4,7 +4,8 @@ class Board(object):
         self.matrix = [[0 for x in range(size)] for y in range(size)]
         self.directions = {'UP': (-1, 0), 'DOWN': (1, 0),
                            'LEFT': (0, -1), 'RIGHT': (0, 1)}
-        self.isRuning = True
+        self.is_runing = True
+        self.is_moved = False
         self.size = size
 
     def __repr__(self):
@@ -19,6 +20,7 @@ class Board(object):
         moves all elements > 0
         and merges equaled.
         """
+        self.is_moved = False
         line_move, col_move = self.directions[command]
         for lines in range(self.size):
             for element in range(self.size):
@@ -33,11 +35,12 @@ class Board(object):
                         if moving_element and moving_element == way_element:
                             self.matrix[line][col] = moving_element*3
                             self.matrix[lines][element] = 0
-                            self.move(command)
+                            self.is_moved = True
                         elif not way_element and moving_element:
                             self.matrix[line][col] = moving_element
                             self.matrix[lines][element] = 0
                             self.move(command)
+                            self.is_moved = True
                         else:
                             pass
                 except IndexError:
@@ -61,7 +64,7 @@ class Board(object):
             chosen_line, chosen_col = choice(avalible_elements)
             self.matrix[chosen_line][chosen_col] = choice(avalible_nums)
         else:
-            self.isRuning = False
+            self.is_runing = False
 
     def check(self):
         """
@@ -83,7 +86,7 @@ class Board(object):
         if posible_moves:
             pass
         else:
-            self.isRuning = False
+            self.is_runing = False
             
     def count(self):
         """
@@ -105,7 +108,7 @@ if __name__ == '__main__':
 
     print('type:\n W for UP\n S for DOWN\n  A for LEFT\n D for RIGHT: \n')
 
-    while game.isRuning:
+    while game.is_runing:
         game.check()
         print(game)
         player_comand = input('comand: ').lower()
@@ -114,7 +117,8 @@ if __name__ == '__main__':
         except KeyError:
             print('WRONG COMAND!')
             continue
-        game.random_num()
+        if game.is_moved:
+            game.random_num()
 
     print('THE END')
     print('your score:', game.count())

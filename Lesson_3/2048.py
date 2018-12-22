@@ -8,6 +8,9 @@ class Board(object):
         self.is_moved = False
         self.size = size
 
+        for i in range(4):
+            self.matrix[i][1] = 3
+
     def __repr__(self):
         lines = []
         for line in self.matrix:
@@ -15,7 +18,7 @@ class Board(object):
         res = '\n'.join(lines)
         return res
 
-    def move(self, command):
+    def move(self, command, _repeated=False):
         """
         moves all elements > 0
         and merges equaled.
@@ -32,17 +35,19 @@ class Board(object):
                     else:
                         way_element = self.matrix[line][col]
                         moving_element = self.matrix[lines][element]
-                        if moving_element and moving_element == way_element:
+                        if moving_element and moving_element == way_element and not _repeated:
                             self.matrix[line][col] = moving_element*3
                             self.matrix[lines][element] = 0
                             self.is_moved = True
+                            self.move(command, _repeated=True)
                         elif not way_element and moving_element:
                             self.matrix[line][col] = moving_element
                             self.matrix[lines][element] = 0
                             self.move(command)
                             self.is_moved = True
-                        else:
-                            pass
+                        elif not way_element and moving_element and _repeated:
+                            self.matrix[line][col] = moving_element
+                            self.matrix[lines][element] = 0
                 except IndexError:
                     continue
 

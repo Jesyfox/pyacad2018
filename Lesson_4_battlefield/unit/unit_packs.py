@@ -1,5 +1,6 @@
 __author__ = 'Bogdan S.'
 from random import choice
+from strategy import Strategy
 
 
 class Operators:
@@ -27,13 +28,14 @@ class Operators:
 class Squad:
     def __init__(self, units):
         self.units = units
-        self.is_Alive = True
+        self.is_alive = True
 
     def __repr__(self):
         return str(self.units)
 
     def attack(self, squads):
         strategy = choice(['random', 'weakest', 'strongest'])
+        # target = Strategy.new(strategy)
         target = self.choose_target(strategy, squads)
         target.take_damage(self.fire())
 
@@ -67,10 +69,12 @@ class Squad:
         for i, unit in enumerate(self.units):
             if not unit.is_Alive:
                 to_delete.append(i)
+
         for i in to_delete:
             self.units.pop(i)
+
         if not self.units:
-            self.is_Alive = False
+            self.is_alive = False
 
     def total_health(self):
         return [unit.health for unit in self.units]
@@ -83,6 +87,22 @@ class Squad:
 
     def fire(self):
         return sum([unit.attack() for unit in self.units])
+
+
+class Side:
+
+    def __init__(self, squads: list):
+        self.squads = squads
+        self.is_alive = True
+
+    def __iter__(self):
+        return self.squads
+
+    def __repr__(self):
+        return str(self.squads)
+
+    def update(self):
+        pass
 
 
 def geometric_average(arr: list):

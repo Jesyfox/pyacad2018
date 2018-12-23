@@ -1,8 +1,8 @@
 __author__ = 'Bogdan.S'
-from abc import *
+from abc import ABC
 from random import randint, sample, random
 from time import time
-from unit_packs import *
+from unit_packs import Squad, Operators, geometric_average
 
 
 def waiter(recharge):

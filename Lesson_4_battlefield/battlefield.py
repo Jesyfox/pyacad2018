@@ -1,54 +1,48 @@
 __author__ = 'Bogdan.S'
-from options import builder_dialog
+from player_dialog import builder_dialog
 
 
 class Battlefield(object):
 
     def __init__(self):
         self.sides = builder_dialog()
-        self.turn = self.next_side()
 
     def __repr__(self):
         from pprint import pprint
         pprint(self.sides)
         return ''
 
-    def next_side(self):
-        """returns next side: next(*class_var*.turn)"""
-        while True:
-            self.update()
-            for side in self.sides.keys():
-                yield self.sides[side]
-
     def update(self):
-        print(self)
+        to_delete = []
         for key in self.sides.keys():
-            self.sides[key] = [s for s in self.sides[key] if s.is_Alive]
+            if not self.sides[key].is_alive:
+                to_delete.append(key)
+
+        for key in to_delete:
+            self.sides.pop(key)
 
     def start(self):
-        # wait_seconds = 4
-        # from time import time
-        # while True:
-        #     timer = time()
-        #     try:
-        #         while True:
-        #             side = next(self.turn)
-        #             oposide_side = next(self.turn)
-        #
-        #             for squad in side:
-        #                 squad.attack(oposide_side)
-        #
-        #             for squad in oposide_side:
-        #                 squad.attack(side)
-        #
-        #             if time() - timer >= wait_seconds:
-        #                 print(self)
-        #                 print('='*20)
-        #                 break
-        #     except IndexError:
-        #         print(self)
-        #         print('THE END')
-        pass
+        from time import time
+        wait_seconds = 4
+        timer = time()
+        cycle_counter = 0
+        while len(self.sides.keys()) > 1:
+            self.update()
+
+            for side, side_obj in self.sides.items():
+                turning_side_index = list(self.sides.keys()).index(side)
+                enemy_sides = list(self.sides.keys()).pop(turning_side_index)
+                side_obj.attack([self.sides[i] for i in enemy_sides if self.sides[i].is_alive])
+                side_obj.update()
+
+            cycle_counter += 1
+
+            if time() - timer >= wait_seconds:
+                timer = time()
+                print('=' * 10, f'cycle{cycle_counter}', '=' * 10)
+                print(self)
+
+        print(f'side {self.sides} Win!')
 
 
 if __name__ == '__main__':

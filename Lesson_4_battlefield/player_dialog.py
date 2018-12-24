@@ -1,7 +1,7 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
-from units import Soldier, Vehicle
-from unit_packs import Squad
+from units import Soldier, Vehicle, Unit
+from unit_packs import Squad, Side
 
 
 def squad_builder():
@@ -19,7 +19,7 @@ def side_builder(side):
     squads = int(input(f'How many squads for side {side}: '))
     for squad in range(1, squads + 1):
         res.append(squad_builder())
-    return res
+    return Side(res)
 
 
 def builder_dialog():
@@ -38,7 +38,7 @@ def builder_dialog():
             break
 
     for side in range(1, sides + 1):
-        res[f'Side {side}'] = side_builder(side)
+        res[f'{side}'] = side_builder(side)
     return res
 
 

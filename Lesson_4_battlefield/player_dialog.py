@@ -1,6 +1,6 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
-from units import Soldier, Vehicle, Unit
+from units import Unit
 from unit_packs import Squad, Side
 
 
@@ -8,9 +8,12 @@ def squad_builder():
     army = randint(5, 10)
     to_squad = []
     for a in range(army):
-        operators = [Soldier() for _ in range(randint(1, 3))]
-        unit = choice([Soldier(), Vehicle(operators)])
-        to_squad.append(unit)
+        unit = choice(['soldier', 'vehicle'])
+        unit_obj = Unit.new(unit)
+        if unit is 'vehicle':
+            unit_obj.add_drivers(randint(1, 3))
+        to_squad.append(unit_obj)
+
     return Squad(to_squad)
 
 

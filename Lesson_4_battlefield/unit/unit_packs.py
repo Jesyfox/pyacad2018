@@ -2,6 +2,7 @@ __author__ = 'Bogdan S.'
 from abc import ABC
 from random import choice
 from strategy import Strategy
+from miscellaneous_junk import geometric_average
 
 
 class UnitPacks(ABC):
@@ -115,11 +116,3 @@ class Side(UnitPacks):
 
     def total_attack(self):
         return sum([squad.total_attack() for squad in self.squads])
-
-
-def geometric_average(arr: list):
-    power = 1 / len(arr)
-    res = 1
-    for i in arr:
-        res *= i
-    return res**power

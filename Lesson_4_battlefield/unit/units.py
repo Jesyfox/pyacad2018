@@ -1,19 +1,8 @@
 __author__ = 'Bogdan.S'
 from abc import ABC
 from random import randint, sample, random
-from time import time
-from unit_packs import Operators, geometric_average
-
-
-def waiter(recharge):
-    while True:
-        timer = time()
-        while True:
-            if (time() - timer) < (recharge/1000):
-                yield True
-            else:
-                yield False
-                break
+from unit_packs import Operators
+from miscellaneous_junk import waiter, geometric_average
 
 
 class Unit(ABC):
@@ -39,7 +28,7 @@ class Unit(ABC):
         return dec
 
     @classmethod
-    def new(cls, name, options=None):
+    def new(cls, name):
         return cls.UNIT[name]()
 
 
@@ -52,7 +41,7 @@ class UnitBaseMixin:
         health %[0-100] - Represents the health of the unit
         recharge [100-2000] Represents the number of ms required to recharge the unit for an attack
     """
-    def __init__(self, min_recharge=200, options=None):
+    def __init__(self, min_recharge=200):
         self.is_alive = True
         self.visual = 'X'
         self.health = 100
@@ -171,7 +160,6 @@ class Vehicle(UnitBaseMixin, Unit):
             num = 1
         drivers = [Soldier() for i in range(num)]
         self.operators = Operators(drivers)
-        print(self.operators)
         self.update()
 
 

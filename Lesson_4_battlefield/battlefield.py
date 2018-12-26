@@ -1,11 +1,12 @@
 __author__ = 'Bogdan.S'
 from player_dialog import builder_dialog
+from json_bridge import construct_sides
 
 
 class Battlefield(object):
 
-    def __init__(self):
-        self.sides = builder_dialog()
+    def __init__(self, obj=construct_sides()):
+        self.sides = obj
 
     def __repr__(self):
         from pprint import pprint

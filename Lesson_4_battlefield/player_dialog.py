@@ -9,9 +9,8 @@ def squad_builder():
     to_squad = []
     for a in range(army):
         unit = choice(['soldier', 'vehicle'])
-        unit_obj = Unit.new(unit)
-        if unit is 'vehicle':
-            unit_obj.add_drivers(randint(1, 3))
+        unit_obj = Unit.new(unit, operator='soldier', u_count=randint(1, 3))
+
         to_squad.append(unit_obj)
 
     return Squad(to_squad)

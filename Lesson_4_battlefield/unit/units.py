@@ -172,6 +172,6 @@ if __name__ == '__main__':
     #     alpha.attack([beta])
     #     beta.attack([alpha])
     #     print(alpha, alpha.total_health(), beta, beta.total_health())
-    a = Unit.new('soldier', operator='soldier', u_count=randint(1, 3))
+    a = Unit.new('vehicle', operator='soldier', u_count=randint(1, 3))
     # a.add_drivers(3)
     print(a)

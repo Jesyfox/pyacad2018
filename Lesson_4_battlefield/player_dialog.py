@@ -8,8 +8,11 @@ def squad_builder():
     army = randint(5, 10)
     to_squad = []
     for a in range(army):
-        unit = choice(['soldier', 'vehicle'])
-        unit_obj = Unit.new(unit, operator='soldier', u_count=randint(1, 3))
+        unit, kw = choice([
+            ('soldier', {}),
+            ('vehicle', {'operator': 'soldier', 'u_count': randint(1, 3)}),
+        ])
+        unit_obj = Unit.new(unit, **kw)
 
         to_squad.append(unit_obj)
 

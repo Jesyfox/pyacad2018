@@ -1,5 +1,5 @@
 import json
-from random import randint, choice
+from random import randint
 from units import Unit
 from unit_packs import Squad, Side
 
@@ -7,23 +7,19 @@ FILE_NAME = 'sides_template.json'
 
 
 def construct_sides(file=FILE_NAME):
-    pattern = json.load(open(file))
-    sides = []
+    with open(file) as f:
+        pattern = json.load(f)
 
-    for side in pattern.keys():
-        squad_list = []
-        for squad in pattern[side].keys():
-            unit_list = []
-            for unit in pattern[side][squad]:
-                name, kw = unit
-                if kw:
-                    min_oper, max_oper = kw['u_count']
-                    kw['u_count'] = randint(min_oper, max_oper)
-                unit_list.append(Unit.new(name, **kw))
-            squad_list.append(Squad(unit_list))
-        sides.append(Side(squad_list))
-
-    return sides
+    return [
+        Side([
+            Squad([
+                Unit.new(name, **kw)
+                for name, kw in units.items()
+            ])
+            for squad_name, units in squads.items()
+        ])
+        for side_name, squads in pattern.items()
+    ]
 
 
 if __name__ == '__main__':

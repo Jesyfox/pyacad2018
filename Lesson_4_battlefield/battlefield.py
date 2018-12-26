@@ -3,10 +3,10 @@ from player_dialog import builder_dialog
 from json_bridge import construct_sides
 
 
-class Battlefield(object):
+class Battlefield:
 
-    def __init__(self, obj=construct_sides()):
-        self.sides = obj
+    def __init__(self, sides):
+        self.sides = sides
 
     def __repr__(self):
         from pprint import pprint

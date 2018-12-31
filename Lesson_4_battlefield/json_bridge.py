@@ -6,7 +6,7 @@ from unit_packs import Squad, Side
 FILE_NAME = 'sides_template.json'
 
 
-def construct_sides(file=FILE_NAME):
+def build_side_pattern_from_file(file=FILE_NAME, template='test_template'):
     with open(file) as f:
         pattern = json.load(f)
 
@@ -14,33 +14,37 @@ def construct_sides(file=FILE_NAME):
         Side([
             Squad([
                 Unit.new(name, **kw)
-                for name, kw in units.items()
+                for name, kw in units
             ])
-            for squad_name, units in squads.items()
-        ])
-        for side_name, squads in pattern.items()
+            for units in squads
+        ], name=side_name)
+        for side_name, squads in pattern[template].items()
     ]
 
 
 if __name__ == '__main__':
     test = {
-        'side_1': {
-            'squad_1': (
-                ('soldier', {}),
-                ('vehicle', {'operator': 'soldier', 'u_count': (1, 3)})
-            ),
-            'squad_2': (
-                ('soldier', {}),
-                ('vehicle', {'operator': 'soldier', 'u_count': (1, 3)})
-            ),
-        },
-        'side_2': {
-            'squad_1': (
-                ('soldier', {}),
-                ('vehicle', {'operator': 'soldier', 'u_count': (1, 3)})
-            )
+        'test_template': {
+            'side_1': [
+                [
+                    ('soldier', {}),
+                    ('vehicle', {'operator': 'soldier', 'u_count': 1}),
+                    ('soldier', {}),
+                    ('soldier', {})
+                ],
+                [
+                    ('soldier', {}),
+                    ('vehicle', {'operator': 'soldier', 'u_count': 2})
+                ],
+            ],
+            'side_2': [
+                [
+                    ('soldier', {}),
+                    ('vehicle', {'operator': 'soldier', 'u_count': 3})
+                ]
+            ]
         }
     }
 
     json.dump(test, open(FILE_NAME, 'w'), indent=4)
-    print(construct_sides())
+    print(build_side_pattern_from_file())

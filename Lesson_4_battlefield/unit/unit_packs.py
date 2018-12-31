@@ -46,7 +46,7 @@ class Squad(UnitPacks):
         self.is_alive = True
 
     def __repr__(self):
-        return str(self.units)
+        return '\n\t' + str(self.units)
 
     def attack(self, squads):
         strategy = choice(['random', 'weakest', 'strongest'])
@@ -85,12 +85,13 @@ class Squad(UnitPacks):
 
 class Side(UnitPacks):
 
-    def __init__(self, squads: list):
+    def __init__(self, squads: list, name: str):
         self.squads = squads
+        self.name = name
         self.is_alive = True
 
     def __repr__(self):
-        return str(self.squads)
+        return '\n' + self.name + str(self.squads) + '\n'
 
     def attack(self, sides):
         """choose the side and attack"""

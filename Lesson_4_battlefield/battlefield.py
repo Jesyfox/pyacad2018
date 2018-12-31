@@ -1,6 +1,6 @@
 __author__ = 'Bogdan.S'
 from player_dialog import builder_dialog
-from json_bridge import construct_sides
+from json_bridge import construct_sides_from_file
 
 
 class Battlefield:

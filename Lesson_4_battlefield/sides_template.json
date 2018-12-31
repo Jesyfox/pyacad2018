@@ -1,53 +1,54 @@
 {
-    "side_1": {
-        "squad_1": [
+    "test_template": {
+        "side_1": [
             [
-                "soldier",
-                {}
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 1
+                    }
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ]
             ],
             [
-                "vehicle",
-                {
-                    "operator": "soldier",
-                    "u_count": [
-                        1,
-                        3
-                    ]
-                }
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 2
+                    }
+                ]
             ]
         ],
-        "squad_2": [
+        "side_2": [
             [
-                "soldier",
-                {}
-            ],
-            [
-                "vehicle",
-                {
-                    "operator": "soldier",
-                    "u_count": [
-                        1,
-                        3
-                    ]
-                }
-            ]
-        ]
-    },
-    "side_2": {
-        "squad_1": [
-            [
-                "soldier",
-                {}
-            ],
-            [
-                "vehicle",
-                {
-                    "operator": "soldier",
-                    "u_count": [
-                        1,
-                        3
-                    ]
-                }
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 3
+                    }
+                ]
             ]
         ]
     }

@@ -1,7 +1,5 @@
 import json
 from random import randint
-from units import Unit
-from unit_packs import Squad, Side
 
 FILE_NAME = 'sides_template.json'
 
@@ -28,19 +26,6 @@ def delete_pattern(template_key, file=FILE_NAME):
         json_db = json.load(f)
         json_db.pop(template_key)
         json.dump(json_db, open(file, 'w'), indent=4)
-
-
-def build_side(pattern: dict):
-    return [
-        Side([
-            Squad([
-                Unit.new(name, **kw)
-                for name, kw in units
-            ])
-            for units in squads
-        ], name=side_name)
-        for side_name, squads in pattern.items()
-    ]
 
 
 if __name__ == '__main__':

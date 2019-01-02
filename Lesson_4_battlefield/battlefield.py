@@ -1,5 +1,4 @@
 __author__ = 'Bogdan.S'
-from player_dialog import builder_dialog
 from units import Unit
 from unit_packs import Squad, Side
 
@@ -8,12 +7,10 @@ class Battlefield:
 
     def __init__(self, sides):
         self.sides = sides
-        self.is_runing = True
+        self.is_running = True
 
     def __repr__(self):
-        from pprint import pprint
-        pprint(self.sides)
-        return ''
+        return str(self.sides)
 
     def update(self):
         to_delete = []
@@ -28,27 +25,24 @@ class Battlefield:
         from time import time
         wait_seconds = 4
         timer = time()
-        cycle_counter = 0
-        while self.is_runing:
+        while self.is_running:
             self.update()
 
             for side, side_obj in enumerate(self.sides):
-                enemy_sides = [self.sides[i] for i, e_side in enumerate(self.sides)
+                enemy_sides_alive = [self.sides[i] for i, e_side in enumerate(self.sides)
                                if i != side and self.sides[i].is_alive]
-                if enemy_sides:
-                    side_obj.attack(enemy_sides)
+                if enemy_sides_alive:
+                    side_obj.attack(enemy_sides_alive)
                     side_obj.update()
                 else:
-                    self.is_runing = False
-
-            cycle_counter += 1
+                    self.is_running = False
 
             if time() - timer >= wait_seconds:
                 timer = time()
-                print('=' * 10, f'cycle{cycle_counter}', '=' * 10)
-                print(self.sides)
+                print('=' * 10)
+                print(self)
 
-        print(f'{self.sides} Win!')
+        print(f'Winner!\n{self.sides[0]}')
 
 
 def build_side(pattern: dict):

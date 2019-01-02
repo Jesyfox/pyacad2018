@@ -1,16 +1,11 @@
 __author__ = 'Bogdan.S'
-from battlefield import Battlefield
+from battlefield import Battlefield, build_side
 from player_dialog import builder_dialog
 
 
 def main():
-
-    print("""\tWelcome to "Battle Simulator 2019"
-           Available Units:
-          "-=/[-0, -0]\\" - a Vehicle with operators
-          \t "-0" -  a Soldier""")
-
-    game = Battlefield(builder_dialog())
+    battle_arrangement = build_side(builder_dialog())
+    game = Battlefield(battle_arrangement)
 
     print('Your arrangement is: \n', game)
 

@@ -1,30 +1,29 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
-from units import Unit
-from unit_packs import Squad, Side
 
 
 def squad_builder():
     army = randint(5, 10)
-    to_squad = []
+    res = []
     for a in range(army):
         unit, kw = choice([
             ('soldier', {}),
             ('vehicle', {'operator': 'soldier', 'u_count': randint(1, 3)}),
         ])
-        unit_obj = Unit.new(unit, **kw)
+        unit_obj = (unit, kw)
 
-        to_squad.append(unit_obj)
+        res.append(unit_obj)
 
-    return Squad(to_squad)
+    return res
 
 
-def side_builder(side):
+def side_builder(side, name):
     res = []
     squads = int(input(f'How many squads for side {side}: '))
     for squad in range(1, squads + 1):
         res.append(squad_builder())
-    return Side(res)
+
+    return res
 
 
 def builder_dialog():
@@ -39,11 +38,12 @@ def builder_dialog():
     res = {}
     while True:
         sides = int(input('How many sides will be fight?(2 - n): '))
-        if sides > 1:
+        if sides >= 2:
             break
 
     for side in range(1, sides + 1):
-        res[f'{side}'] = side_builder(side)
+        name = f'side {side}'
+        res[name] = side_builder(side, name)
     return res
 
 

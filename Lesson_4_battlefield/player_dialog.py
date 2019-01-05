@@ -74,6 +74,15 @@ def load_pattern_dialog():
     return list_of_patterns[choice]
 
 
+def delete_pattern_dialog():
+    list_of_patterns = jb.get_available_patterns()
+
+    template = player_choice(list_of_patterns, 'Available patterns: ')
+    jb.delete_pattern(template)
+
+    return None
+
+
 def player_choice(choices: dict, message=''):
     choice_dict = dict(enumerate(choices.keys(), 1))
 
@@ -92,11 +101,17 @@ def player_choice(choices: dict, message=''):
 def menu_dialog():
     main_menu = {
         'new template': builder_dialog,
-        'load template': load_pattern_dialog
+        'load template': load_pattern_dialog,
+        'delete template': delete_pattern_dialog
         }
 
     jump = player_choice(main_menu, 'Welcome to Battle Simulator 2019')
-    return main_menu[jump]()
+    while True:
+        res = main_menu[jump]()
+        if res:
+            break
+
+    return res
 
 
 if __name__ == '__main__':

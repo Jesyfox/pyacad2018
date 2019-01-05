@@ -10,13 +10,13 @@ def get_side_pattern(template, file=FILE_NAME):
 
 def get_available_patterns(file=FILE_NAME):
     with open(file) as f:
-        return dict(enumerate(json.load(f).keys()))
+        return json.load(f)
 
 
-def safe_pattern(template, file=FILE_NAME):
+def safe_pattern(template_name, file=FILE_NAME):
     with open(file) as f:
         json_db = json.load(f)
-        json_db.update(template)
+        json_db.update(template_name)
         json.dump(json_db, open(file, 'w'), indent=4)
 
 

@@ -1,6 +1,6 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
-import json_bridge as JB
+import json_bridge as jb
 
 
 def squad_builder():
@@ -18,7 +18,7 @@ def squad_builder():
     return res
 
 
-def side_builder(side, name):
+def side_builder(side):
     res = []
     squads = int(input(f'How many squads for side {side}: '))
     for squad in range(1, squads + 1):
@@ -36,6 +36,8 @@ def builder_dialog():
 
     its all returns the dict file
     """
+    from battlefield import build_side
+
     res = {}
     while True:
         sides = int(input('How many sides will be fight?(2 - n): '))
@@ -44,32 +46,56 @@ def builder_dialog():
 
     for side in range(1, sides + 1):
         name = f'side {side}'
-        res[name] = side_builder(side, name)
+        res[name] = side_builder(side)
 
+    print(f'your arrangement: {build_side(res)}')
+
+    safe_pattern_dialog(res)
     return res
 
 
-def safe_dialog():
-    safe_menu = {
+def safe_pattern_dialog(pattern):
+    player_wish_to = {
         'yes': True,
         'no': False
     }
+    safe = player_choice(player_wish_to, 'Do you with to safe it?')
+    if player_wish_to[safe]:
+        template_name = input('Enter the template name: ')
+        template = {template_name: pattern}
+        jb.safe_pattern(template)
 
 
-def player_choice(choices: dict):
+def load_pattern_dialog():
+    list_of_patterns = jb.get_available_patterns()
+
+    choice = player_choice(list_of_patterns, 'Available patterns: ')
+
+    return list_of_patterns[choice]
+
+
+def player_choice(choices: dict, message=''):
     choice_dict = dict(enumerate(choices.keys(), 1))
+
+    print(message)
+
     for i, item in choice_dict.items():
         print(i, '-', item)
-    return choice_dict.get(int(input('Enter the choice: ')), 'wrong choice')
+    while True:
+        res = choice_dict.get(int(input('Enter the choice: ')))
+        if res:
+            break
+
+    return res
 
 
 def menu_dialog():
     main_menu = {
         'new template': builder_dialog,
-        'load template': JB.get_available_patterns
+        'load template': load_pattern_dialog
         }
 
-    jump = player_choice(main_menu)
+    jump = player_choice(main_menu, 'Welcome to Battle Simulator 2019')
     return main_menu[jump]()
 
 

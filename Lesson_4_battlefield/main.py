@@ -1,15 +1,17 @@
 __author__ = 'Bogdan.S'
 from battlefield import Battlefield, build_side
-from player_dialog import builder_dialog
+from player_dialog import menu_dialog
 
 
 def main():
-    battle_arrangement = build_side(builder_dialog())
-    game = Battlefield(battle_arrangement)
+    try:
+        battle_arrangement = build_side(menu_dialog())
+        game = Battlefield(battle_arrangement)
 
-    print('Your arrangement is: \n', game)
-
-    game.start()
+        print('Battle is starting!')
+        game.start()
+    except KeyboardInterrupt:
+        print('\nGood bye!')
 
 
 if __name__ == '__main__':

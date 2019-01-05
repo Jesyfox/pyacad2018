@@ -1,5 +1,4 @@
 import json
-from random import randint
 
 FILE_NAME = 'sides_template.json'
 

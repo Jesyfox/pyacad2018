@@ -1,5 +1,6 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
+import json_bridge as JB
 
 
 def squad_builder():
@@ -44,8 +45,33 @@ def builder_dialog():
     for side in range(1, sides + 1):
         name = f'side {side}'
         res[name] = side_builder(side, name)
+
     return res
 
 
+def safe_dialog():
+    safe_menu = {
+        'yes': True,
+        'no': False
+    }
+
+
+def player_choice(choices: dict):
+    choice_dict = dict(enumerate(choices.keys(), 1))
+    for i, item in choice_dict.items():
+        print(i, '-', item)
+    return choice_dict.get(int(input('Enter the choice: ')), 'wrong choice')
+
+
+def menu_dialog():
+    main_menu = {
+        'new template': builder_dialog,
+        'load template': JB.get_available_patterns
+        }
+
+    jump = player_choice(main_menu)
+    return main_menu[jump]()
+
+
 if __name__ == '__main__':
-    print(builder_dialog())
+    print(menu_dialog())

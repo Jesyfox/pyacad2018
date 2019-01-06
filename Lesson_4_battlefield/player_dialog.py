@@ -1,6 +1,7 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
 import json_bridge as jb
+from battlefield import build_side
 
 
 def squad_builder():
@@ -36,7 +37,6 @@ def builder_dialog():
 
     its all returns the dict file
     """
-    from battlefield import build_side
 
     res = {}
     while True:
@@ -59,43 +59,63 @@ def safe_pattern_dialog(pattern):
         'yes': True,
         'no': False
     }
-    safe = player_choice(player_wish_to, 'Do you with to safe it?')
+    safe = player_choice(player_wish_to, 'Do you with to safe it?',
+                         back_possible=False)
     if player_wish_to[safe]:
-        template_name = input('Enter the template name: ')
+        template_name = dialog_input('Enter the template name: ')
         template = {template_name: pattern}
         jb.safe_pattern(template)
 
 
+def available_patterns_dialog():
+    list_of_patterns = jb.get_available_patterns()
+    for pattern in list_of_patterns:
+        side_pattern = jb.get_side_pattern(pattern)
+        print(f'\n"{pattern}" ->', build_side(side_pattern))
+
+    chosen = player_choice(list_of_patterns, 'Available patterns: ')
+    if not chosen:
+        return None
+    else:
+        return chosen
+
+
 def load_pattern_dialog():
     list_of_patterns = jb.get_available_patterns()
-
-    choice = player_choice(list_of_patterns, 'Available patterns: ')
-
-    return list_of_patterns[choice]
+    chosen_pattern = available_patterns_dialog()
+    if chosen_pattern:
+        return list_of_patterns[chosen_pattern]
 
 
 def delete_pattern_dialog():
-    list_of_patterns = jb.get_available_patterns()
-
-    template = player_choice(list_of_patterns, 'Available patterns: ')
-    jb.delete_pattern(template)
+    chosen_pattern = available_patterns_dialog()
+    jb.delete_pattern(chosen_pattern)
 
     return None
 
 
-def player_choice(choices: dict, message=''):
+def player_choice(choices: dict, message='', back_possible=True):
     choice_dict = dict(enumerate(choices.keys(), 1))
+    if back_possible:
+        choice_dict.update({0: None})
 
     print(message)
 
     for i, item in choice_dict.items():
         print(i, '-', item)
-    while True:
-        res = choice_dict.get(int(input('Enter the choice: ')))
-        if res:
-            break
+    res = choice_dict.get(int(dialog_input('Enter the choice: ')))
 
     return res
+
+
+def dialog_input(message):
+    not_available_inputs = ['', ]
+    while True:
+        res = input(message)
+        if res in not_available_inputs:
+            continue
+        else:
+            return res
 
 
 def menu_dialog():
@@ -104,13 +124,14 @@ def menu_dialog():
         'load template': load_pattern_dialog,
         'delete template': delete_pattern_dialog
         }
-
-    jump = player_choice(main_menu, 'Welcome to Battle Simulator 2019')
     while True:
+        jump = player_choice(main_menu, '\nWelcome to Battle Simulator 2019')
+        if not jump:
+            raise KeyboardInterrupt
+
         res = main_menu[jump]()
         if res:
             break
-
     return res
 
 

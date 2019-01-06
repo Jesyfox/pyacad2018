@@ -8,6 +8,9 @@ from miscellaneous_junk import waiter, geometric_average
 class Unit(ABC):
     UNIT = {}
 
+    def __init__(self, **kwargs):
+        pass
+
     def take_damage(self, damage):
         pass
 
@@ -28,8 +31,8 @@ class Unit(ABC):
         return dec
 
     @classmethod
-    def new(cls, name):
-        return cls.UNIT[name]()
+    def new(cls, name, **kwargs):
+        return cls.UNIT[name](**kwargs)
 
 
 class UnitBaseMixin:
@@ -41,7 +44,7 @@ class UnitBaseMixin:
         health %[0-100] - Represents the health of the unit
         recharge [100-2000] Represents the number of ms required to recharge the unit for an attack
     """
-    def __init__(self, min_recharge=200):
+    def __init__(self, min_recharge=200, **kwargs):
         self.is_alive = True
         self.visual = 'X'
         self.health = 100
@@ -90,7 +93,7 @@ class Soldier(UnitBaseMixin, Unit):
     the attack success probability and the amount of damage inflicted
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self.unit_type = 'soldier'
         self.experience = 0
@@ -118,10 +121,11 @@ class Vehicle(UnitBaseMixin, Unit):
     with and health. if the vehicle is destroyed, any remaining vehicle operator is considered as inactive(killed)
     """
 
-    def __init__(self, drivers=[Soldier()]):
+    def __init__(self, **kwargs):
         super().__init__(min_recharge=1000,)
         self.unit_type = 'vehicle'
-        self.operators = Operators(drivers)
+        self._add_drivers(kwargs['operator'], kwargs['u_count'])
+        #self.operators = Operators(drivers)
         self.update()  # initial call
 
     def take_damage(self, damage):
@@ -153,12 +157,8 @@ class Vehicle(UnitBaseMixin, Unit):
         self.operators.exp_increase()
         self.update()
 
-    def add_drivers(self, num):
-        if num > 3:
-            num = 3
-        elif num < 0:
-            num = 1
-        drivers = [Soldier() for i in range(num)]
+    def _add_drivers(self, drvr, num):
+        drivers = [Unit.new(drvr) for i in range(num)]
         self.operators = Operators(drivers)
         self.update()
 
@@ -172,6 +172,5 @@ if __name__ == '__main__':
     #     alpha.attack([beta])
     #     beta.attack([alpha])
     #     print(alpha, alpha.total_health(), beta, beta.total_health())
-    a = Unit.new('vehicle')
-    a.add_drivers(3)
+    a = Unit.new('vehicle', operator='soldier', u_count=randint(1, 3))
     print(a)

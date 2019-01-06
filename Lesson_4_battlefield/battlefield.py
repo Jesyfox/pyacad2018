@@ -1,22 +1,22 @@
 __author__ = 'Bogdan.S'
-from player_dialog import builder_dialog
+from units import Unit
+from unit_packs import Squad, Side
 
 
-class Battlefield(object):
+class Battlefield:
 
-    def __init__(self):
-        self.sides = builder_dialog()
+    def __init__(self, sides):
+        self.sides = sides
+        self.is_running = True
 
     def __repr__(self):
-        from pprint import pprint
-        pprint(self.sides)
-        return ''
+        return str(self.sides)
 
     def update(self):
         to_delete = []
-        for key in self.sides.keys():
-            if not self.sides[key].is_alive:
-                to_delete.append(key)
+        for num, side in enumerate(self.sides):
+            if not self.sides[num].is_alive:
+                to_delete.append(num)
 
         for key in to_delete:
             self.sides.pop(key)
@@ -25,25 +25,63 @@ class Battlefield(object):
         from time import time
         wait_seconds = 4
         timer = time()
-        cycle_counter = 0
-        while len(self.sides.keys()) > 1:
+        while self.is_running:
             self.update()
 
-            for side, side_obj in self.sides.items():
-                turning_side_index = list(self.sides.keys()).index(side)
-                enemy_sides = list(self.sides.keys()).pop(turning_side_index)
-                side_obj.attack([self.sides[i] for i in enemy_sides if self.sides[i].is_alive])
-                side_obj.update()
-
-            cycle_counter += 1
+            for side, side_obj in enumerate(self.sides):
+                enemy_sides_alive = [self.sides[i] for i, e_side in enumerate(self.sides)
+                               if i != side and self.sides[i].is_alive]
+                if enemy_sides_alive:
+                    side_obj.attack(enemy_sides_alive)
+                    side_obj.update()
+                else:
+                    self.is_running = False
 
             if time() - timer >= wait_seconds:
                 timer = time()
-                print('=' * 10, f'cycle{cycle_counter}', '=' * 10)
+                print('=' * 10)
                 print(self)
 
-        print(f'side {self.sides} Win!')
+        print(f'Winner!\n{self.sides[0]}')
+
+
+def build_side(pattern: dict):
+    return [
+        Side([
+            Squad([
+                Unit.new(name, **kw)
+                for name, kw in units
+            ])
+            for units in squads
+        ], name=side_name)
+        for side_name, squads in pattern.items()
+    ]
 
 
 if __name__ == '__main__':
-    pass
+    test = {
+        'test_template_1': {
+            'side_1': [
+                [
+                    ('soldier', {}),
+                    ('vehicle', {'operator': 'soldier', 'u_count': 1}),
+                    ('soldier', {}),
+                    ('soldier', {})
+                ],
+                [
+                    ('soldier', {}),
+                    ('vehicle', {'operator': 'soldier', 'u_count': 2})
+                ],
+            ],
+            'side_2': [
+                [
+                    ('soldier', {}),
+                    ('vehicle', {'operator': 'soldier', 'u_count': 3})
+                ]
+            ]
+        },
+
+    }
+    template = build_side(test['test_template_1'])
+    game = Battlefield(template)
+    game.start()

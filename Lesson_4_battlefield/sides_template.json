@@ -1,0 +1,88 @@
+{
+    "3v, 4s vs 8s, 1v": {
+        "side 1": [
+            [
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 2
+                    }
+                ],
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 2
+                    }
+                ],
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 2
+                    }
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ]
+            ]
+        ],
+        "side 2": [
+            [
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "vehicle",
+                    {
+                        "operator": "soldier",
+                        "u_count": 3
+                    }
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ],
+                [
+                    "soldier",
+                    {}
+                ]
+            ]
+        ]
+    }
+}

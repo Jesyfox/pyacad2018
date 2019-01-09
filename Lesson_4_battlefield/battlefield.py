@@ -30,7 +30,7 @@ class Battlefield:
 
             for side, side_obj in enumerate(self.sides):
                 enemy_sides_alive = [self.sides[i] for i, e_side in enumerate(self.sides)
-                               if i != side and self.sides[i].is_alive]
+                                     if i != side and self.sides[i].is_alive]
                 if enemy_sides_alive:
                     side_obj.attack(enemy_sides_alive)
                     side_obj.update()
@@ -42,7 +42,8 @@ class Battlefield:
                 print('=' * 10)
                 print(self)
 
-        print(f'Winner!\n{self.sides[0]}')
+        self.update()
+        print(f'Winner!\n{self.sides}')
 
 
 def build_side(pattern: dict):

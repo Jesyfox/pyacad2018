@@ -125,7 +125,6 @@ class Vehicle(UnitBaseMixin, Unit):
         super().__init__(min_recharge=1000,)
         self.unit_type = 'vehicle'
         self._add_drivers(kwargs['operator'], kwargs['u_count'])
-        #self.operators = Operators(drivers)
         self.update()  # initial call
 
     def take_damage(self, damage):

@@ -1,8 +1,8 @@
 __author__ = 'Bogdan.S'
 from abc import ABC
 from random import randint, sample, random
-from unit_packs import Operators
-from miscellaneous_junk import waiter, geometric_average
+from .unit_packs import Operators
+from .miscellaneous_junk import waiter, geometric_average
 
 
 class Unit(ABC):

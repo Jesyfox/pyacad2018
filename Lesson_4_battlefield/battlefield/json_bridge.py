@@ -1,6 +1,6 @@
 import json
 
-FILE_NAME = 'sides_template.json'
+FILE_NAME = 'battlefield/sides_template.json'
 
 
 def get_side_pattern(template, file=FILE_NAME):

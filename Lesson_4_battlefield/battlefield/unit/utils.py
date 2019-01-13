@@ -20,4 +20,3 @@ def geometric_average(arr: list):
     for i in arr:
         res *= i
     return res**power
-

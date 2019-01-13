@@ -73,7 +73,7 @@ class UnitBaseMixin:
             self.is_alive = False
 
     def attack(self):
-        if random() < self.attack_success and not next(self.reload):
+        if random() < self.attack_success and next(self.reload):
             self.exp_increase()
             return self.damage
         else:

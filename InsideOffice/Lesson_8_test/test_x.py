@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, call
-import x
+import InsideOffice.Lesson_8_test.x as x
 
 
 class TestStringMethods(unittest.TestCase):

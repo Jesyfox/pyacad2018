@@ -11,6 +11,12 @@ class TestUtils(unittest.TestCase):
 
     @patch('battlefield.unit.utils.time')
     def test_waiter(self, mock_time):
+        """
+        to understand:
+        if recharge var is 2000 then in one loop will be one "FALSE" and one "TRUE"
+        if 4000 then three "FALSE" and one "TRUE"
+        etc.
+        """
         recharge = 2000
         mock_time.side_effect = [i+1 for i in range(1000)]
         waiting_var = waiter(recharge)

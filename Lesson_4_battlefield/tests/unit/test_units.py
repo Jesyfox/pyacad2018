@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from battlefield.unit.units import Unit
 
 available_units = [

@@ -26,4 +26,3 @@ class TestBattlefield(unittest.TestCase):
         for i in range(3):
             self.assertEqual(type(testing_build[0].squads[0].units[i]),
                              type(equal_build[0].squads[0].units[i]))
-

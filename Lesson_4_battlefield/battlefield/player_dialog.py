@@ -1,7 +1,7 @@
 __author__ = 'Bogdan.S'
 from random import randint, choice
-import json_bridge as jb
-from battlefield import build_side
+from . import json_bridge as jb
+from .battlefield import build_side
 
 
 def squad_builder():

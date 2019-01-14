@@ -1,8 +1,8 @@
 __author__ = 'Bogdan.S'
 from abc import ABC
 from random import randint, sample, random
-from unit_packs import Operators
-from miscellaneous_junk import waiter, geometric_average
+from .unit_packs import Operators
+from .utils import waiter, geometric_average
 
 
 class Unit(ABC):
@@ -73,7 +73,7 @@ class UnitBaseMixin:
             self.is_alive = False
 
     def attack(self):
-        if random() < self.attack_success and not next(self.reload):
+        if random() < self.attack_success and next(self.reload):
             self.exp_increase()
             return self.damage
         else:

@@ -1,8 +1,8 @@
 __author__ = 'Bogdan S.'
 from abc import ABC
 from random import choice
-from strategy import Strategy
-from miscellaneous_junk import geometric_average
+from .strategy import Strategy
+from .utils import geometric_average
 
 
 class UnitPacks(ABC):

@@ -1,6 +1,6 @@
 __author__ = 'Bogdan.S'
-from units import Unit
-from unit_packs import Squad, Side
+from .unit.units import Unit
+from .unit.unit_packs import Squad, Side
 
 
 class Battlefield:

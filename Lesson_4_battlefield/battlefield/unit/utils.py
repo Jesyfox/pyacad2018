@@ -5,13 +5,13 @@ def waiter(recharge):
     while True:
         timer = time()
         while True:
-            # if you want some fast battle research
-            # append some ZEROS to this num  \/
-            if (time() - timer) < (recharge/1000):
+            time_passed = (time() - timer)
+            need_to_be_passed = (recharge/1000)
+            if time_passed >= need_to_be_passed:
                 yield True
+                break
             else:
                 yield False
-                break
 
 
 def geometric_average(arr: list):

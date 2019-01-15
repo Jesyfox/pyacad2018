@@ -3,6 +3,7 @@ from abc import ABC
 from random import choice
 from .strategy import Strategy
 from .utils import geometric_average
+from battlefield.logger_battlefield import logger
 
 
 class UnitPacks(ABC):
@@ -64,6 +65,9 @@ class Squad(UnitPacks):
             if not unit.is_alive:
                 to_delete.append(i)
 
+        if to_delete:
+            logger.debug(f'{len(to_delete)} unit out')
+
         for i in to_delete:
             self.units.pop(i)
 
@@ -105,6 +109,9 @@ class Side(UnitPacks):
         for i, squad in enumerate(self.squads):
             if not squad.is_alive:
                 to_delete.append(i)
+
+        if to_delete:
+            logger.debug(f'{to_delete} squad out')
 
         for i in to_delete:
             self.squads.pop(i)

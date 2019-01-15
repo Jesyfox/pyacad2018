@@ -3,6 +3,7 @@ from abc import ABC
 from random import randint, sample, random
 from .unit_packs import Operators
 from .utils import waiter, geometric_average
+from battlefield.logger_battlefield import logger
 
 
 class Unit(ABC):
@@ -32,6 +33,7 @@ class Unit(ABC):
 
     @classmethod
     def new(cls, name, **kwargs):
+        logger.debug(f'# created {name}')
         return cls.UNIT[name](**kwargs)
 
 

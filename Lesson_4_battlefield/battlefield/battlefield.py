@@ -1,6 +1,7 @@
 __author__ = 'Bogdan.S'
 from .unit.units import Unit
 from .unit.unit_packs import Squad, Side
+from .logger_battlefield import logger
 
 
 class Battlefield:
@@ -18,6 +19,9 @@ class Battlefield:
             if not self.sides[num].is_alive:
                 to_delete.append(num)
 
+        if to_delete:
+            logger.debug(f'{len(to_delete)} side out')
+
         for key in to_delete:
             self.sides.pop(key)
 
@@ -25,6 +29,7 @@ class Battlefield:
         from time import time
         wait_seconds = 4
         timer = time()
+        logger.debug('# starting battle!')
         while self.is_running:
             self.update()
 
@@ -35,6 +40,7 @@ class Battlefield:
                     side_obj.attack(enemy_sides_alive)
                     side_obj.update()
                 else:
+                    logger.debug('# battle is over')
                     self.is_running = False
 
             if time() - timer >= wait_seconds:
@@ -47,6 +53,7 @@ class Battlefield:
 
 
 def build_side(pattern: dict):
+    logger.debug('# building side')
     return [
         Side([
             Squad([
@@ -57,32 +64,3 @@ def build_side(pattern: dict):
         ], name=side_name)
         for side_name, squads in pattern.items()
     ]
-
-
-if __name__ == '__main__':
-    test = {
-        'test_template_1': {
-            'side_1': [
-                [
-                    ('soldier', {}),
-                    ('vehicle', {'operator': 'soldier', 'u_count': 1}),
-                    ('soldier', {}),
-                    ('soldier', {})
-                ],
-                [
-                    ('soldier', {}),
-                    ('vehicle', {'operator': 'soldier', 'u_count': 2})
-                ],
-            ],
-            'side_2': [
-                [
-                    ('soldier', {}),
-                    ('vehicle', {'operator': 'soldier', 'u_count': 3})
-                ]
-            ]
-        },
-
-    }
-    template = build_side(test['test_template_1'])
-    game = Battlefield(template)
-    game.start()

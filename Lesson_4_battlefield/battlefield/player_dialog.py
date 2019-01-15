@@ -2,9 +2,11 @@ __author__ = 'Bogdan.S'
 from random import randint, choice
 from . import json_bridge as jb
 from .battlefield import build_side
+from .logger_battlefield import logger
 
 
 def squad_builder():
+    logger.debug('# building squad')
     army = randint(5, 10)
     res = []
     for a in range(army):
@@ -20,6 +22,7 @@ def squad_builder():
 
 
 def side_builder(side):
+    logger.debug('# building side')
     res = []
     squads = int(input(f'How many squads for side {side}: '))
     for squad in range(1, squads + 1):
@@ -49,7 +52,6 @@ def builder_dialog():
         res[name] = side_builder(side)
 
     print(f'your arrangement: {build_side(res)}')
-
     safe_pattern_dialog(res)
     return res
 
@@ -62,6 +64,7 @@ def safe_pattern_dialog(pattern):
     safe = player_choice(player_wish_to, 'Do you with to safe it?',
                          back_possible=False)
     if player_wish_to[safe]:
+        logger.debug('# saving pattern')
         template_name = dialog_input('Enter the template name: ')
         template = {template_name: pattern}
         jb.safe_pattern(template)
@@ -81,6 +84,7 @@ def available_patterns_dialog():
 
 
 def load_pattern_dialog():
+    logger.debug('# loading pattern')
     list_of_patterns = jb.get_available_patterns()
     chosen_pattern = available_patterns_dialog()
     if chosen_pattern:
@@ -88,6 +92,7 @@ def load_pattern_dialog():
 
 
 def delete_pattern_dialog():
+    logger.debug('# deleting pattern')
     chosen_pattern = available_patterns_dialog()
     jb.delete_pattern(chosen_pattern)
 
@@ -128,6 +133,7 @@ def menu_dialog():
         jump = player_choice(main_menu, '\nWelcome to Battle Simulator 2019')
         if not jump:
             raise KeyboardInterrupt
+        logger.debug(f'# player choose is {jump}')
 
         res = main_menu[jump]()
         if res:

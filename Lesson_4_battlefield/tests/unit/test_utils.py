@@ -6,8 +6,7 @@ from battlefield.unit.utils import geometric_average, waiter
 class TestUtils(unittest.TestCase):
 
     def test_geometric_average(self):
-        self.assertEqual(geometric_average([1, 2, 3, 4, 5]),
-                         2.605171084697352)
+        self.assertAlmostEqual(geometric_average([1, 2, 3, 4, 5]), 2.6, places=1)
 
     @patch('battlefield.unit.utils.time')
     def test_waiter(self, mock_time):

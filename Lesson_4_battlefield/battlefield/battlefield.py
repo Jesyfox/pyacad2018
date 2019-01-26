@@ -31,11 +31,12 @@ class Battlefield:
             side_obj.update()
         else:
             logger.debug('# battle is over')
+            self.update()
             self.is_running = False
 
-    def filter_enemy_sides(self, my_side):
+    def filter_enemy_sides(self, playing_side_index):
         return [self.sides[i] for i, e_side in enumerate(self.sides)
-                if i != my_side and self.sides[i].is_alive]
+                if i != playing_side_index and self.sides[i].is_alive]
 
     def start(self):
         from time import time
@@ -45,8 +46,8 @@ class Battlefield:
         while self.is_running:
             self.update()
 
-            for side, side_obj in enumerate(self.sides):
-                enemy_sides_alive = self.filter_enemy_sides(side)
+            for turning_side, side_obj in enumerate(self.sides):
+                enemy_sides_alive = self.filter_enemy_sides(turning_side)
                 self.side_attack(side_obj, enemy_sides_alive)
 
             if time() - timer >= wait_seconds:
@@ -54,7 +55,6 @@ class Battlefield:
                 print('=' * 30)
                 print(self)
 
-        self.update()
         print(f'Winner!\n{self.sides}')
 
 

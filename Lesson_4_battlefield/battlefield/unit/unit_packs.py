@@ -42,9 +42,10 @@ class Operators(UnitPacks):
 
 
 class Squad(UnitPacks):
-    def __init__(self, units):
+    def __init__(self, units, name=''):
         self.units = units
         self.is_alive = True
+        self.side_name = name
 
     def __repr__(self):
         return '\n\t' + str(self.units)
@@ -66,7 +67,8 @@ class Squad(UnitPacks):
                 to_delete.append(i)
 
         if to_delete:
-            logger.debug(f'{len(to_delete)} unit out')
+            dead_units = [self.units[i].unit_type for i in to_delete]
+            logger.debug(f'{self.side_name} {dead_units[0]} out')
 
         for i in to_delete:
             self.units.pop(i)
@@ -111,7 +113,7 @@ class Side(UnitPacks):
                 to_delete.append(i)
 
         if to_delete:
-            logger.debug(f'{to_delete} squad out')
+            logger.debug(f'{self.name} squad out')
 
         for i in to_delete:
             self.squads.pop(i)

@@ -132,7 +132,3 @@ def menu_dialog():
         if res:
             break
     return res
-
-
-if __name__ == '__main__':
-    print(menu_dialog())

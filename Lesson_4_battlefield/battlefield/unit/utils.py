@@ -2,11 +2,13 @@ from time import time
 
 
 def waiter(recharge):
+    STANDART_TIME = 1000
+    FASTEST_TIME = 10**10
     while True:
         timer = time()
         while True:
             time_passed = (time() - timer)
-            need_to_be_passed = (recharge/1000)
+            need_to_be_passed = (recharge/STANDART_TIME)
             if time_passed >= need_to_be_passed:
                 yield True
                 break

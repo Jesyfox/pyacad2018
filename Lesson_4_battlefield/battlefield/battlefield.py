@@ -20,7 +20,8 @@ class Battlefield:
                 to_delete.append(num)
 
         if to_delete:
-            logger.debug(f'{len(to_delete)} side out')
+            sides = [self.sides[i].name for i in to_delete]
+            logger.debug(f'{sides[0]} out')
 
         for key in to_delete:
             self.sides.pop(key)
@@ -30,7 +31,6 @@ class Battlefield:
             side_obj.attack(enemy_sides)
             side_obj.update()
         else:
-            logger.debug('# battle is over')
             self.update()
             self.is_running = False
 
@@ -55,17 +55,17 @@ class Battlefield:
                 print('=' * 30)
                 print(self)
 
+        logger.debug('# battle is over')
         print(f'Winner!\n{self.sides}')
 
 
 def build_side(pattern: dict):
-    logger.debug('# building side')
     return [
         Side([
             Squad([
                 Unit.new(name, **kw)
                 for name, kw in units
-            ])
+            ], name=side_name)
             for units in squads
         ], name=side_name)
         for side_name, squads in pattern.items()

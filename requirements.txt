@@ -14,7 +14,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 Lektor==3.1.2
 MarkupSafe==1.1.0
-mistune==0.8.4
+mistune==2.0.3
 pathtools==0.1.2
 pkg-resources==0.0.0
 pycparser==2.19
@@ -42,7 +42,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 Lektor==3.1.2
 MarkupSafe==1.1.0
-mistune==0.8.4
+mistune==2.0.3
 pathtools==0.1.2
 pkg-resources==0.0.0
 pycparser==2.19
